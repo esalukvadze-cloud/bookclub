@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Книжный клуб Екатерины Салуквадзе</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap');
+
+:root{
+  --ink:#160f07;--cream:#fdf8f0;--paper:#f4ede0;
+  --amber:#b8722a;--gold:#c9962f;--rust:#8a3318;
+  --sage:#3d5c37;--lavender:#6b5e8f;--dust:#9e8e7a;--line:#e6ddd0;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--cream);color:var(--ink);min-height:100vh;overflow-x:hidden}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23g)' opacity='0.025'/%3E%3C/svg%3E");pointer-events:none;z-index:9999}
+
+.screen{display:none;min-height:100vh;flex-direction:column}
+.screen.active{display:flex}
+
+/* ══ HERO ══ */
+#hero{background:var(--ink);align-items:center;justify-content:center;text-align:center;padding:70px 24px 80px;position:relative;overflow:hidden}
+#hero::before{content:'';position:absolute;width:600px;height:600px;background:radial-gradient(circle,rgba(185,114,42,.18) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-60%);animation:glow 4s ease-in-out infinite alternate;pointer-events:none}
+@keyframes glow{from{opacity:.6;transform:translate(-50%,-60%) scale(1)}to{opacity:1;transform:translate(-50%,-58%) scale(1.08)}}
+.hero-letters{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.hero-letters span{position:absolute;font-family:'Cormorant Garamond',serif;font-style:italic;color:rgba(255,255,255,.025);font-size:clamp(60px,10vw,120px);animation:floatL 18s linear infinite;white-space:nowrap}
+@keyframes floatL{from{transform:translateY(110vh) rotate(-8deg)}to{transform:translateY(-20vh) rotate(-8deg)}}
+.hero-inner{position:relative;z-index:1;max-width:640px}
+.hero-monogram{display:inline-flex;align-items:center;justify-content:center;width:64px;height:64px;border:1px solid rgba(201,150,47,.5);border-radius:50%;font-family:'Cormorant Garamond',serif;font-size:26px;color:var(--gold);margin-bottom:28px;position:relative}
+.hero-monogram::before,.hero-monogram::after{content:'';position:absolute;width:80px;height:1px;background:linear-gradient(90deg,transparent,rgba(201,150,47,.4),transparent);top:50%}
+.hero-monogram::before{right:calc(100% + 12px)}
+.hero-monogram::after{left:calc(100% + 12px)}
+.hero-eyebrow{font-size:11px;letter-spacing:4px;text-transform:uppercase;color:rgba(201,150,47,.7);font-weight:500;margin-bottom:20px}
+.hero-name{font-family:'Cormorant Garamond',serif;font-size:clamp(14px,3vw,18px);font-weight:300;letter-spacing:2px;color:rgba(253,248,240,.5);text-transform:uppercase;margin-bottom:12px}
+.hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(52px,10vw,88px);color:var(--cream);line-height:.95;font-weight:300;margin-bottom:8px}
+.hero-title em{font-style:italic;color:var(--gold);display:block}
+.hero-rule{display:flex;align-items:center;gap:16px;margin:28px auto;max-width:300px;opacity:.25}
+.hero-rule span{flex:1;height:1px;background:var(--cream)}
+.hero-rule i{font-style:normal;font-size:14px;color:var(--cream)}
+.hero-sub{font-size:16px;color:rgba(253,248,240,.45);line-height:1.8;margin-bottom:48px;font-weight:300;max-width:440px;margin-left:auto;margin-right:auto}
+.btn-hero{display:inline-block;background:linear-gradient(135deg,var(--amber),var(--gold));color:var(--cream);border:none;padding:18px 52px;font-family:'Inter',sans-serif;font-size:14px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;border-radius:2px;cursor:pointer;transition:all .3s;position:relative;overflow:hidden}
+.btn-hero::after{content:'';position:absolute;inset:0;background:linear-gradient(120deg,transparent,rgba(255,255,255,.2),transparent);transform:translateX(-100%);transition:.5s}
+.btn-hero:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(184,114,42,.4)}
+.btn-hero:hover::after{transform:translateX(100%)}
+.hero-footnote{margin-top:48px;font-size:12px;color:rgba(253,248,240,.2);letter-spacing:1px}
+
+/* ══ SURVEY BAR ══ */
+#survey{padding:0}
+.survey-bar{background:var(--ink);padding:16px 32px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;border-bottom:1px solid rgba(255,255,255,.06)}
+.sbar-logo{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--cream);display:flex;align-items:center;gap:10px}
+.sbar-logo-dot{width:28px;height:28px;border:1px solid rgba(201,150,47,.5);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--gold);flex-shrink:0}
+.sbar-right{display:flex;align-items:center;gap:16px}
+.prog-text{font-size:12px;color:rgba(253,248,240,.35);letter-spacing:1px;white-space:nowrap}
+.prog-dots{display:flex;gap:5px;align-items:center}
+.prog-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.12);transition:all .3s;flex-shrink:0}
+.prog-dot.done{background:rgba(201,150,47,.5)}
+.prog-dot.active{background:var(--gold);width:18px;border-radius:3px}
+
+/* ══ SLIDES ══ */
+.slides-outer{flex:1;position:relative;overflow:hidden;min-height:calc(100vh - 60px)}
+.q-slide{position:absolute;inset:0;display:flex;align-items:flex-start;justify-content:center;padding:52px 24px 80px;overflow-y:auto;opacity:0;transform:translateX(48px);transition:opacity .35s ease,transform .35s cubic-bezier(.4,0,.2,1);pointer-events:none}
+.q-slide.active{opacity:1;transform:translateX(0);pointer-events:all}
+.q-slide.exit{opacity:0;transform:translateX(-48px)}
+.q-inner{width:100%;max-width:660px}
+.q-tag{font-size:10px;letter-spacing:3.5px;text-transform:uppercase;color:var(--amber);font-weight:600;margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.q-tag::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--line),transparent)}
+.q-title{font-family:'Cormorant Garamond',serif;font-size:clamp(26px,5vw,40px);line-height:1.2;margin-bottom:6px;color:var(--ink);font-weight:400}
+.q-title em{font-style:italic;color:var(--amber)}
+.q-hint{font-size:13px;color:var(--dust);margin-bottom:36px;font-weight:300;line-height:1.6}
+.opts{display:grid;gap:10px}
+.opts.two{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.opt{display:flex;align-items:center;gap:14px;padding:15px 18px;border:1.5px solid var(--line);border-radius:6px;cursor:pointer;background:#fff;transition:border-color .2s,background .2s,transform .15s;font-size:14px;color:var(--ink);text-align:left;user-select:none;position:relative;overflow:hidden}
+.opt::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(184,114,42,.06),transparent);opacity:0;transition:opacity .2s}
+.opt:hover{border-color:var(--amber);transform:translateY(-1px)}
+.opt:hover::before{opacity:1}
+.opt.selected{border-color:var(--amber);background:#fffaf4}
+.opt.selected::before{opacity:1}
+.opt-mark{width:20px;height:20px;border:1.5px solid var(--line);border-radius:50%;flex-shrink:0;position:relative;transition:all .2s}
+.opt.selected .opt-mark{border-color:var(--amber);background:var(--amber)}
+.opt.selected .opt-mark::after{content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;font-weight:700}
+.opt.check .opt-mark{border-radius:3px}
+.opt.check.selected .opt-mark{background:var(--sage);border-color:var(--sage)}
+.opt-icon{font-size:20px;flex-shrink:0}
+.opt-label{flex:1;line-height:1.4}
+.opt-sub{font-size:11px;color:var(--dust);margin-top:1px}
+.s-input,.s-textarea{width:100%;font-family:'Inter',sans-serif;font-size:15px;color:var(--ink);background:#fff;border:1.5px solid var(--line);border-radius:6px;outline:none;transition:border-color .2s;line-height:1.6}
+.s-input{padding:14px 18px}
+.s-textarea{padding:16px 18px;resize:vertical;min-height:130px}
+.s-input:focus,.s-textarea:focus{border-color:var(--amber)}
+.s-input::placeholder,.s-textarea::placeholder{color:#c4b8a6}
+.slider-box{padding:4px 0 8px}
+.slider-labels{display:flex;justify-content:space-between;font-size:11px;color:var(--dust);margin-bottom:10px}
+input[type=range]{-webkit-appearance:none;width:100%;height:4px;border-radius:2px;outline:none;cursor:pointer;background:linear-gradient(to right,var(--amber) 0%,var(--amber) 30%,var(--line) 30%,var(--line) 100%)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;border-radius:50%;background:var(--amber);box-shadow:0 2px 10px rgba(184,114,42,.35);cursor:pointer}
+.slider-val{text-align:center;margin-top:14px;font-family:'Cormorant Garamond',serif;font-size:44px;color:var(--amber);line-height:1}
+.slider-val span{font-size:18px;color:var(--dust);font-family:'Inter',sans-serif;margin-left:6px}
+.q-nav{display:flex;align-items:center;justify-content:space-between;margin-top:44px;padding-top:24px;border-top:1px solid var(--line)}
+.btn-back,.btn-next{padding:13px 30px;border-radius:3px;font-family:'Inter',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;letter-spacing:.5px}
+.btn-back{background:transparent;border:1.5px solid var(--line);color:var(--dust)}
+.btn-back:hover{border-color:var(--ink);color:var(--ink)}
+.btn-back:disabled{opacity:.3;pointer-events:none}
+.btn-next{background:var(--ink);border:1.5px solid var(--ink);color:var(--cream)}
+.btn-next:hover{background:#2a1c0e}
+.btn-next.green{background:var(--sage);border-color:var(--sage)}
+.btn-next.green:hover{background:#2e4629}
+.char-wrap{display:grid;gap:12px}
+.char-field{padding:20px;background:#fff;border:1.5px solid var(--line);border-radius:8px}
+.char-field-label{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--amber);font-weight:600;margin-bottom:10px}
+.char-field-icon{font-size:28px;margin-bottom:8px}
+.stars{display:flex;gap:8px;margin-top:4px}
+.star{font-size:28px;cursor:pointer;filter:grayscale(1);opacity:.3;transition:all .15s}
+.star:hover,.star.lit{filter:none;opacity:1;transform:scale(1.1)}
+
+/* ══ GAME SCREEN ══ */
+#game-screen{background:linear-gradient(160deg,#1a0f06 0%,#0f0a04 100%);align-items:center;justify-content:center;text-align:center;padding:60px 24px;position:relative;overflow:hidden}
+.game-particles{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.game-particle{position:absolute;font-size:20px;animation:particleFly var(--dur,8s) linear infinite;opacity:.12;bottom:-40px}
+@keyframes particleFly{from{transform:translateY(0) rotate(0deg)}to{transform:translateY(-110vh) rotate(360deg)}}
+.game-inner{position:relative;z-index:1;max-width:600px;width:100%}
+.game-badge{display:inline-block;background:rgba(201,150,47,.15);border:1px solid rgba(201,150,47,.3);color:var(--gold);padding:6px 20px;border-radius:20px;font-size:11px;letter-spacing:3px;text-transform:uppercase;margin-bottom:32px}
+.game-title{font-family:'Cormorant Garamond',serif;font-size:clamp(32px,6vw,56px);color:var(--cream);line-height:1.1;margin-bottom:12px}
+.game-title em{color:var(--gold);font-style:italic}
+.game-sub{font-size:15px;color:rgba(253,248,240,.4);line-height:1.7;margin-bottom:48px}
+.gq-num{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:rgba(201,150,47,.6);font-weight:500;margin-bottom:16px}
+.gq-text{font-family:'Cormorant Garamond',serif;font-size:clamp(22px,4vw,32px);color:var(--cream);margin-bottom:28px;line-height:1.3}
+.game-opts{display:grid;gap:10px;text-align:left;max-width:480px;margin:0 auto 32px}
+.game-opt{padding:14px 20px;border:1.5px solid rgba(255,255,255,.1);border-radius:6px;cursor:pointer;color:rgba(253,248,240,.7);font-size:14px;background:rgba(255,255,255,.03);transition:all .2s;display:flex;align-items:center;gap:12px}
+.game-opt:hover,.game-opt.sel{border-color:var(--amber);background:rgba(184,114,42,.12);color:var(--cream)}
+.game-opt-letter{width:26px;height:26px;border-radius:50%;border:1px solid currentColor;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;flex-shrink:0;font-family:'Cormorant Garamond',serif;transition:all .2s}
+.game-opt.sel .game-opt-letter{background:var(--amber);border-color:var(--amber);color:#fff}
+.game-progress{display:flex;gap:6px;justify-content:center;margin-bottom:32px}
+.gp-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.1);transition:.3s}
+.gp-dot.done{background:rgba(201,150,47,.5)}
+.gp-dot.cur{background:var(--gold);width:20px;border-radius:4px}
+.btn-game{background:linear-gradient(135deg,var(--amber),var(--gold));color:var(--cream);border:none;padding:15px 40px;border-radius:3px;font-family:'Inter',sans-serif;font-size:14px;font-weight:500;letter-spacing:.5px;cursor:pointer;transition:all .2s}
+.btn-game:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(184,114,42,.4)}
+.btn-game:disabled{opacity:.3;pointer-events:none}
+
+/* ── GAME RESULT ── */
+.game-result{display:none;animation:fadeUp .6s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.result-hero-icon{font-size:72px;margin-bottom:16px;display:block}
+.result-hero-name{font-family:'Cormorant Garamond',serif;font-size:clamp(32px,6vw,52px);color:var(--gold);margin-bottom:8px}
+.result-hero-sub{font-size:14px;color:rgba(253,248,240,.35);letter-spacing:2px;text-transform:uppercase;margin-bottom:20px}
+.result-hero-desc{font-size:15px;color:rgba(253,248,240,.6);line-height:1.8;max-width:440px;margin:0 auto 28px}
+.result-trait{display:inline-block;background:rgba(201,150,47,.15);border:1px solid rgba(201,150,47,.25);color:var(--gold);padding:5px 14px;border-radius:20px;font-size:12px;margin:4px}
+
+/* ── SHARE CARD ── */
+.share-section{
+  margin-top:32px;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:12px;
+  padding:24px;
+  max-width:480px;
+  margin-left:auto;margin-right:auto;
+}
+.share-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:18px;color:var(--cream);
+  margin-bottom:6px;
+}
+.share-hint{
+  font-size:12px;color:rgba(253,248,240,.35);
+  margin-bottom:20px;line-height:1.6;
+}
+.share-hint strong{color:rgba(201,150,47,.8);display:block;margin-top:6px;font-size:13px}
+.share-preview{
+  border-radius:8px;overflow:hidden;margin-bottom:16px;
+  box-shadow:0 8px 32px rgba(0,0,0,.4);
+}
+.share-preview canvas{display:block;width:100%;height:auto}
+.btn-download{
+  width:100%;padding:14px;
+  background:linear-gradient(135deg,var(--amber),var(--gold));
+  color:var(--cream);border:none;border-radius:6px;
+  font-family:'Inter',sans-serif;font-size:14px;font-weight:600;
+  cursor:pointer;transition:all .2s;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  letter-spacing:.3px;
+}
+.btn-download:hover{transform:translateY(-1px);box-shadow:0 8px 20px rgba(184,114,42,.4)}
+.btn-download-icon{font-size:18px}
+
+.game-result-btns{
+  display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:24px;
+}
+
+/* ══ PASSWORD OVERLAY ══ */
+#pwd-overlay{
+  position:fixed;inset:0;
+  background:rgba(22,15,7,.97);
+  display:none;
+  align-items:center;justify-content:center;
+  z-index:9000;text-align:center;padding:40px;
+}
+#pwd-overlay.show{display:flex}
+.pwd-box{max-width:360px;width:100%}
+.pwd-logo{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--cream);margin-bottom:8px}
+.pwd-logo em{color:var(--gold);font-style:italic}
+.pwd-sub{font-size:13px;color:rgba(253,248,240,.3);margin-bottom:32px;line-height:1.6}
+.pwd-input{
+  width:100%;padding:14px 20px;
+  background:rgba(255,255,255,.06);
+  border:1.5px solid rgba(255,255,255,.12);
+  border-radius:6px;color:var(--cream);
+  font-family:'Inter',sans-serif;font-size:16px;
+  text-align:center;letter-spacing:4px;outline:none;
+  transition:border-color .2s;
+}
+.pwd-input:focus{border-color:var(--amber)}
+.pwd-input::placeholder{letter-spacing:1px;color:rgba(255,255,255,.2);font-size:13px}
+.pwd-btn{
+  width:100%;margin-top:14px;
+  padding:14px;background:var(--amber);color:var(--cream);
+  border:none;border-radius:4px;
+  font-family:'Inter',sans-serif;font-size:14px;font-weight:500;
+  cursor:pointer;transition:all .2s;
+}
+.pwd-btn:hover{background:#c97e30}
+.pwd-err{
+  margin-top:12px;font-size:13px;color:#c0503a;
+  opacity:0;transition:opacity .2s;
+}
+.pwd-err.show{opacity:1}
+.pwd-cancel{
+  margin-top:20px;font-size:12px;color:rgba(253,248,240,.25);
+  cursor:pointer;background:none;border:none;font-family:'Inter',sans-serif;
+}
+.pwd-cancel:hover{color:rgba(253,248,240,.5)}
+
+/* ══ THANKS ══ */
+#thanks{background:var(--ink);align-items:center;justify-content:center;text-align:center;padding:80px 24px;position:relative;overflow:hidden}
+#thanks::before{content:'';position:absolute;width:500px;height:500px;background:radial-gradient(circle,rgba(184,114,42,.12) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
+.thanks-inner{position:relative;z-index:1}
+.thanks-icon{font-size:64px;margin-bottom:24px;display:block;animation:bookOpen .7s cubic-bezier(.4,0,.2,1)}
+@keyframes bookOpen{from{transform:scale(.4) rotate(-15deg);opacity:0}70%{transform:scale(1.1) rotate(3deg)}to{transform:scale(1) rotate(0deg);opacity:1}}
+.thanks-eyebrow{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:rgba(201,150,47,.6);margin-bottom:16px}
+.thanks-title{font-family:'Cormorant Garamond',serif;font-size:clamp(40px,7vw,64px);color:var(--cream);margin-bottom:16px;font-weight:300}
+.thanks-title em{font-style:italic;color:var(--gold)}
+.thanks-sub{font-size:16px;color:rgba(253,248,240,.4);max-width:380px;line-height:1.8;margin:0 auto 48px}
+.thanks-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.btn-sec{padding:14px 28px;border:1.5px solid rgba(253,248,240,.2);background:transparent;color:rgba(253,248,240,.5);font-family:'Inter',sans-serif;font-size:13px;border-radius:3px;cursor:pointer;transition:all .2s}
+.btn-sec:hover{border-color:rgba(253,248,240,.5);color:var(--cream)}
+
+/* ══ RESULTS ══ */
+#results{padding:0;flex-direction:column}
+.res-header{background:var(--ink);padding:24px 40px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;border-bottom:1px solid rgba(255,255,255,.06)}
+.res-logo{font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--cream)}
+.res-logo small{display:block;font-family:'Inter',sans-serif;font-size:11px;color:rgba(253,248,240,.3);letter-spacing:2px;text-transform:uppercase;margin-top:2px}
+.res-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.res-count{background:linear-gradient(135deg,var(--amber),var(--gold));color:var(--cream);padding:8px 20px;border-radius:3px;font-size:13px;font-weight:500}
+.view-tabs{display:flex;background:rgba(255,255,255,.06);border-radius:4px;padding:3px;gap:2px}
+.vtab{padding:7px 18px;border:none;background:transparent;color:rgba(253,248,240,.4);font-family:'Inter',sans-serif;font-size:12px;font-weight:500;cursor:pointer;border-radius:3px;transition:all .2s}
+.vtab.on{background:var(--amber);color:var(--cream)}
+.btn-ghost{padding:8px 16px;border:1px solid rgba(253,248,240,.15);background:transparent;color:rgba(253,248,240,.3);font-family:'Inter',sans-serif;font-size:11px;border-radius:3px;cursor:pointer;transition:all .2s}
+.btn-ghost:hover{border-color:var(--rust);color:var(--rust)}
+.res-body{padding:40px;max-width:960px;margin:0 auto;width:100%}
+.rc{background:#fff;border:1px solid var(--line);border-radius:10px;padding:28px;margin-bottom:20px;opacity:0;transform:translateY(16px);transition:opacity .4s,transform .4s}
+.rc.vis{opacity:1;transform:translateY(0)}
+.rc-tag{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--amber);font-weight:600;margin-bottom:8px}
+.rc-title{font-family:'Cormorant Garamond',serif;font-size:22px;margin-bottom:22px;color:var(--ink)}
+.bchart{display:grid;gap:9px}
+.brow{display:grid;grid-template-columns:1fr 180px 36px;align-items:center;gap:12px}
+.brow-label{font-size:13px;color:#5a4e3e;text-align:right}
+.btrack{background:var(--paper);border-radius:3px;height:26px;overflow:hidden}
+.bfill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--amber),var(--gold));transition:width .9s cubic-bezier(.4,0,.2,1);width:0}
+.bfill.s{background:linear-gradient(90deg,var(--sage),#5a8a52)}
+.bfill.l{background:linear-gradient(90deg,var(--lavender),#9a8fc0)}
+.bfill.r{background:linear-gradient(90deg,var(--rust),#b8502e)}
+.bcount{font-size:13px;color:var(--dust);font-weight:500}
+.avg-box{display:flex;align-items:center;gap:24px;flex-wrap:wrap}
+.avg-num{font-family:'Cormorant Garamond',serif;font-size:64px;color:var(--amber);line-height:1}
+.avg-meta{flex:1}
+.avg-desc{font-size:14px;color:var(--dust);margin-bottom:10px}
+.avg-track{height:5px;background:var(--paper);border-radius:3px;overflow:hidden}
+.avg-fill{height:100%;background:linear-gradient(90deg,var(--amber),var(--gold));border-radius:3px;transition:width 1s ease}
+.quotes{display:grid;gap:10px}
+.quote-item{padding:16px 20px;background:var(--paper);border-left:3px solid var(--amber);border-radius:0 6px 6px 0;font-size:14px;line-height:1.7;color:#3a2e1e;font-style:italic}
+.quote-author{font-size:11px;color:var(--dust);font-style:normal;margin-top:6px;letter-spacing:.5px}
+.quote-item.s-border{border-left-color:var(--sage)}
+.quote-item.l-border{border-left-color:var(--lavender)}
+.hero-cloud{display:flex;flex-wrap:wrap;gap:8px}
+.hero-tag{padding:8px 16px;background:var(--paper);border-radius:20px;font-size:13px;color:#3a2e1e;display:flex;align-items:center;gap:6px}
+.hero-tag-count{background:var(--amber);color:#fff;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0}
+.people-grid{display:grid;gap:16px}
+.person-card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:22px 26px;opacity:0;transform:translateY(10px);transition:.35s}
+.person-card.vis{opacity:1;transform:translateY(0)}
+.pc-head{display:flex;align-items:center;gap:12px;margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.pc-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--amber),var(--gold));display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:18px;color:#fff;flex-shrink:0}
+.pc-name{font-family:'Cormorant Garamond',serif;font-size:20px}
+.pc-time{font-size:11px;color:var(--dust);margin-top:2px;letter-spacing:.5px}
+.pc-rows{display:grid;gap:8px}
+.pc-row{font-size:13px;color:#5a4e3e;line-height:1.5}
+.pc-row strong{color:var(--ink);display:block;font-size:11px;text-transform:uppercase;letter-spacing:1px;margin-bottom:2px;font-weight:500}
+.char-result-cloud{display:flex;flex-wrap:wrap;gap:8px}
+.char-result-badge{padding:10px 18px;border-radius:6px;background:var(--paper);border:1px solid var(--line);font-size:13px;color:#3a2e1e;display:flex;align-items:center;gap:8px}
+.empty-state{text-align:center;padding:80px 24px;color:var(--dust)}
+.empty-state h3{font-family:'Cormorant Garamond',serif;font-size:32px;color:var(--ink);margin-bottom:12px}
+
+/* hidden canvas for card drawing */
+#card-canvas{display:none}
+
+@media(max-width:640px){
+  .brow{grid-template-columns:90px 1fr 28px}
+  .brow-label{font-size:11px}
+  .res-body{padding:20px 16px}
+  .res-header{padding:20px 16px}
+}
+</style>
+</head>
+<body>
+
+<!-- ══ PASSWORD OVERLAY ══ -->
+<div id="pwd-overlay">
+  <div class="pwd-box">
+    <div class="pwd-logo">Книжный клуб <em>Екатерины</em></div>
+    <p class="pwd-sub">Панель результатов доступна только организатору. Введите пароль для входа.</p>
+    <input class="pwd-input" id="pwd-input" type="password" placeholder="Введите пароль..." onkeydown="if(event.key==='Enter')checkPwd()">
+    <button class="pwd-btn" onclick="checkPwd()">Войти →</button>
+    <p class="pwd-err" id="pwd-err">Неверный пароль. Попробуйте ещё раз.</p>
+    <button class="pwd-cancel" onclick="closePwd()">Отмена</button>
+  </div>
+</div>
+
+<!-- ══ HERO ══ -->
+<div id="hero" class="screen active">
+  <div class="hero-letters">
+    <span style="left:5%;animation-delay:-3s;animation-duration:20s">А</span>
+    <span style="left:25%;animation-delay:-8s;animation-duration:16s">Б</span>
+    <span style="left:50%;animation-delay:-1s;animation-duration:22s">В</span>
+    <span style="left:72%;animation-delay:-12s;animation-duration:18s">Г</span>
+    <span style="left:88%;animation-delay:-6s;animation-duration:14s">Д</span>
+  </div>
+  <div class="hero-inner">
+    <div class="hero-monogram" id="secret-btn" onclick="handleSecretTap()" style="cursor:pointer;-webkit-tap-highlight-color:transparent">Е</div>
+    <p class="hero-eyebrow">✦ Литературный опрос ✦</p>
+    <p class="hero-name">Книжный клуб Екатерины Салуквадзе</p>
+    <h1 class="hero-title">Расскажи<br>нам о себе<br><em>как читатель</em></h1>
+    <div class="hero-rule"><span></span><i>❧</i><span></span></div>
+    <p class="hero-sub">Несколько вопросов о твоих книжных пристрастиях и любимых героях — и маленькая игра в конце, которая раскроет, кто ты из великих литературных персонажей.</p>
+    <button class="btn-hero" onclick="startSurvey()">Открыть книгу →</button>
+    <p class="hero-footnote">≈ 4 минуты · 12 вопросов + игра</p>
+  </div>
+</div>
+
+<!-- ══ SURVEY ══ -->
+<div id="survey" class="screen">
+  <div class="survey-bar">
+    <div class="sbar-logo">
+      <div class="sbar-logo-dot">Е</div>
+      <span>Книжный клуб <em style="font-style:italic;color:var(--gold)">Екатерины</em></span>
+    </div>
+    <div class="sbar-right">
+      <span class="prog-text" id="prog-text">1 / 12</span>
+      <div class="prog-dots" id="prog-dots"></div>
+    </div>
+  </div>
+  <div class="slides-outer" id="slides">
+
+    <div class="q-slide active" data-qi="0">
+      <div class="q-inner">
+        <div class="q-tag">Глава первая</div>
+        <h2 class="q-title">Как тебя зовут,<br><em>дорогой читатель?</em></h2>
+        <p class="q-hint">Имя или псевдоним — как тебе комфортно</p>
+        <input class="s-input" id="a0" placeholder="Твоё имя..." oninput="save(0,this.value)">
+        <div class="q-nav">
+          <button class="btn-back" disabled>← Назад</button>
+          <button class="btn-next" onclick="go(0,1)">Дальше →</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="q-slide" data-qi="1">
+      <div class="q-inner">
+        <div class="q-tag">Глава вторая</div>
+        <h2 class="q-title">Сколько книг ты<br><em>поглощаешь</em> в месяц?</h2>
+        <p class="q-hint">Подвигай ползунок — честно!</p>
+        <div class="slider-box">
+          <div class="slider-labels"><span>0</span><span>2</span><span>5</span><span>8</span><span>10+</span></div>
+          <input type="range" id="a1" min="0" max="10" value="3" oninput="updateSlider(this,'sv1');save(1,this.value)">
+          <div class="slider-val"><span id="sv1">3</span><span>книги</span></div>
+        </div>
+        <div class="q-nav">
+          <button class="btn-back" onclick="go(1,0)">← Назад</button>
+          <button class="btn-next" onclick="go(1,2)">Дальше →</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="q-slide" data-qi="2">
+      <div class="q-inner">
+        <div class="q-tag">Глава третья</div>
+        <h2 class="q-title">Какие жанры<br><em>не отпускают</em> тебя?</h2>
+        <p class="q-hint">Можно выбрать несколько — всё, что резонирует</p>
+        <div class="opts two" id="g2">
+          <button class="opt check" onclick="multi(this,2,'g2')"><div class="opt-mark"></div><span class="opt-icon">🔍</span><div class="opt-label">Детектив<div class="opt-sub">Тайны и расследования</div></div></button>
+          <button class="opt check" onclick="multi(this,2,'g2')"><div class="opt-mark"></div><span class="opt-icon">🌌</span><div class="opt-label">Фантастика<div class="opt-sub">Другие миры и время</div></div></button>
+          <button class="opt check" onclick="multi(this,2,'g2')"><div class="opt-mark"></div><span class="opt-icon">💔</span><div class="opt-label">Романтика<div class="opt-sub">О любви и сердце</div></div></button>
+          <button class="opt check" onclick="multi(this,2,'g2')"><div class="opt-mark"></div><span class="opt-icon">🧠</span><div class="opt-label">Психология<div class="opt-sub">Человек и его глубины</div></div></button>
+          <button class="opt check" onclick="multi(this,2,'g2')"><div class="opt-mark"></div><span class="opt-icon">🏛️</span><div class="opt-label">Историческое<div class="opt-sub">Прошлое оживает</div></div></button>
+          <button class="opt check" onclick="multi(this,2,'g2')"><div class="opt-mark"></div><span class="opt-icon">🎭</span><div class="opt-label">Классика<div class="opt-sub">Вечные тексты</div></div></button>
+          <button class="opt check" onclick="multi(this,2,'g2')"><div class="opt-mark"></div><span class="opt-icon">📓</span><div class="opt-label">Нон-фикшн<div class="opt-sub">Правда интереснее</div></div></button>
+          <button class="opt check" onclick="multi(this,2,'g2')"><div class="opt-mark"></div><span class="opt-icon">✨</span><div class="opt-label">Магический реализм<div class="opt-sub">Чудо в обычном</div></div></button>
+        </div>
+        <div class="q-nav">
+          <button class="btn-back" onclick="go(2,1)">← Назад</button>
+          <button class="btn-next" onclick="go(2,3)">Дальше →</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="q-slide" data-qi="3">
+      <div class="q-inner">
+        <div class="q-tag">Глава четвёртая</div>
+        <h2 class="q-title">Какая книга<br>стала для тебя <em>своей?</em></h2>
+        <p class="q-hint">Та самая, которую невозможно забыть</p>
+        <input class="s-input" id="a3" placeholder="Название и автор..." oninput="save(3,this.value)" style="margin-bottom:16px">
+        <p style="font-size:13px;color:var(--dust);margin-bottom:10px">Что она значит для тебя? (необязательно)</p>
+        <textarea class="s-textarea" id="a3b" placeholder="Несколько слов о том, почему именно эта..." oninput="save('3b',this.value)" style="min-height:90px"></textarea>
+        <div class="q-nav">
+          <button class="btn-back" onclick="go(3,2)">← Назад</button>
+          <button class="btn-next" onclick="go(3,4)">Дальше →</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="q-slide" data-qi="4">
+      <div class="q-inner">
+        <div class="q-tag">Глава пятая</div>
+        <h2 class="q-title">Мужской герой,<br>который <em>не выходит из головы</em></h2>
+        <p class="q-hint">Из любой книги — тот, кто задел что-то в тебе</p>
+        <div class="char-wrap">
+          <div class="char-field">
+            <div class="char-field-icon">⚔️</div>
+            <div class="char-field-label">Имя героя и книга</div>
+            <input class="s-input" id="a4" placeholder="Например: Раскольников, «Преступление и наказание»..." oninput="save(4,this.value)">
+          </div>
+          <div class="char-field">
+            <div class="char-field-label">Чем он тебя покорил?</div>
+            <textarea class="s-textarea" id="a4b" placeholder="Его сила духа, слабости, противоречия..." oninput="save('4b',this.value)" style="min-height:80px"></textarea>
+          </div>
+        </div>
+        <div class="q-nav">
+          <button class="btn-back" onclick="go(4,3)">← Назад</button>
+          <button class="btn-next" onclick="go(4,5)">Дальше →</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="q-slide" data-qi="5">
+      <div class="q-inner">
+        <div class="q-tag">Глава шестая</div>
+        <h2 class="q-title">Женский образ,<br>который <em>остался с тобой</em></h2>
+        <p class="q-hint">Героиня, которая восхищает или вдохновляет</p>
+        <div class="char-wrap">
+          <div class="char-field">
+            <div class="char-field-icon">🌹</div>
+            <div class="char-field-label">Имя героини и книга</div>
+            <input class="s-input" id="a5" placeholder="Например: Анна Каренина, «Анна Каренина»..." oninput="save(5,this.value)">
+          </div>
+          <div class="char-field">
+            <div class="char-field-label">Что в ней особенного?</div>
+            <textarea class="s-textarea" id="a5b" placeholder="Её характер, судьба, поступки..." oninput="save('5b',this.value)" style="min-height:80px"></textarea>
+          </div>
+        </div>
+        <div class="q-nav">
+          <button class="btn-back" onclick="go(5,4)">← Назад</button>
+          <button class="btn-next" onclick="go(5,6)">Дальше →</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="q-slide" data-qi="6">
+      <div class="q-inner">
+        <div class="q-tag">Глава седьмая</div>
+        <h2 class="q-title">Как ты <em>предпочитаешь</em><br>читать?</h2>
+        <p class="q-hint">Один вариант — твой любимый способ</p>
+        <div class="opts" id="g6">
+          <button class="opt" onclick="one(this,6,'g6')"><div class="opt-mark"></div><span class="opt-icon">📗</span><div class="opt-label">Бумажная книга<div class="opt-sub">Запах страниц, закладки, карандашные пометки</div></div></button>
+          <button class="opt" onclick="one(this,6,'g6')"><div class="opt-mark"></div><span class="opt-icon">📱</span><div class="opt-label">Электронная книга<div class="opt-sub">Тысяча книг в кармане</div></div></button>
+          <button class="opt" onclick="one(this,6,'g6')"><div class="opt-mark"></div><span class="opt-icon">🎧</span><div class="opt-label">Аудиокнига<div class="opt-sub">Слушаю голос рассказчика</div></div></button>
+          <button class="opt" onclick="one(this,6,'g6')"><div class="opt-mark"></div><span class="opt-icon">🔀</span><div class="opt-label">Всё равно — главное история</div></button>
+        </div>
+        <div class="q-nav">
+          <button class="btn-back" onclick="go(6,5)">← Назад</button>
+          <button class="btn-next" onclick="go(6,7)">Дальше →</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="q-slide" data-qi="7">
+      <div class="q-inner">
+        <div class="q-tag">Глава восьмая</div>
+        <h2 class="q-title">Где ты <em>растворяешься</em><br>в книге?</h2>
+        <p class="q-hint">Твоё любимое место для чтения</p>
+        <div class="opts" id="g7">
+          <button class="opt" onclick="one(this,7,'g7')"><div class="opt-mark"></div><span class="opt-icon">🛋️</span><div class="opt-label">Дома на диване</div></button>
+          <button class="opt" onclick="one(this,7,'g7')"><div class="opt-mark"></div><span class="opt-icon">☕</span><div class="opt-label">В кафе с кофе</div></button>
+          <button class="opt" onclick="one(this,7,'g7')"><div class="opt-mark"></div><span class="opt-icon">🚇</span><div class="opt-label">В транспорте</div></button>
+          <button class="opt" onclick="one(this,7,'g7')"><div class="opt-mark"></div><span class="opt-icon">🌿</span><div class="opt-label">На улице или в парке</div></button>
+          <button class="opt" onclick="one(this,7,'g7')"><div class="opt-mark"></div><span class="opt-icon">🛁</span><div class="opt-label">В ванной</div></button>
+          <button class="opt" onclick="one(this,7,'g7')"><div class="opt-mark"></div><span class="opt-icon">🛏️</span><div class="opt-label">В постели перед сном</div></button>
+        </div>
+        <div class="q-nav">
+          <button class="btn-back" onclick="go(7,6)">← Назад</button>
+          <button class="btn-next" onclick="go(7,8)">Дальше →</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="q-slide" data-qi="8">
+      <div class="q-inner">
+        <div class="q-tag">Глава девятая</div>
+        <h2 class="q-title">Что делает книгу<br><em>настоящей</em> для тебя?</h2>
+        <p class="q-hint">Что важнее всего — одно главное</p>
+        <div class="opts" id="g8">
+          <button class="opt" onclick="one(this,8,'g8')"><div class="opt-mark"></div><span class="opt-icon">💬</span><div class="opt-label">Живые персонажи<div class="opt-sub">В которых видишь себя или знакомых</div></div></button>
+          <button class="opt" onclick="one(this,8,'g8')"><div class="opt-mark"></div><span class="opt-icon">⚡</span><div class="opt-label">Захватывающий сюжет<div class="opt-sub">Не можешь оторваться</div></div></button>
+          <button class="opt" onclick="one(this,8,'g8')"><div class="opt-mark"></div><span class="opt-icon">🖊️</span><div class="opt-label">Красота языка<div class="opt-sub">Хочется перечитывать фразы</div></div></button>
+          <button class="opt" onclick="one(this,8,'g8')"><div class="opt-mark"></div><span class="opt-icon">💡</span><div class="opt-label">Глубокие идеи<div class="opt-sub">Меняет взгляд на жизнь</div></div></button>
+          <button class="opt" onclick="one(this,8,'g8')"><div class="opt-mark"></div><span class="opt-icon">🌍</span><div class="opt-label">Атмосфера и мир<div class="opt-sub">Хочется жить внутри</div></div></button>
+        </div>
+        <div class="q-nav">
+          <button class="btn-back" onclick="go(8,7)">← Назад</button>
+          <button class="btn-next" onclick="go(8,9)">Дальше →</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="q-slide" data-qi="9">
+      <div class="q-inner">
+        <div class="q-tag">Глава десятая</div>
+        <h2 class="q-title">Какую книгу ты хочешь<br><em>прочитать вместе?</em></h2>
+        <p class="q-hint">Название, автор или просто тема — любой формат</p>
+        <textarea class="s-textarea" id="a9" placeholder="«Сто лет одиночества», что-нибудь про Японию, современный триллер о женщинах..." oninput="save(9,this.value)"></textarea>
+        <div class="q-nav">
+          <button class="btn-back" onclick="go(9,8)">← Назад</button>
+          <button class="btn-next" onclick="go(9,10)">Дальше →</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="q-slide" data-qi="10">
+      <div class="q-inner">
+        <div class="q-tag">Глава одиннадцатая</div>
+        <h2 class="q-title">Как тебе атмосфера<br>наших <em>встреч?</em></h2>
+        <p class="q-hint">Поставь звёзды честно — нам важно знать</p>
+        <div class="stars" id="stars10" style="margin-bottom:24px">
+          <span class="star" onclick="rateStar(0,10)">★</span>
+          <span class="star" onclick="rateStar(1,10)">★</span>
+          <span class="star" onclick="rateStar(2,10)">★</span>
+          <span class="star" onclick="rateStar(3,10)">★</span>
+          <span class="star" onclick="rateStar(4,10)">★</span>
+        </div>
+        <textarea class="s-textarea" id="a10b" placeholder="Что нравится? Что хотелось бы изменить?" oninput="save('10b',this.value)" style="min-height:100px"></textarea>
+        <div class="q-nav">
+          <button class="btn-back" onclick="go(10,9)">← Назад</button>
+          <button class="btn-next" onclick="go(10,11)">Дальше →</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="q-slide" data-qi="11">
+      <div class="q-inner">
+        <div class="q-tag">Глава двенадцатая</div>
+        <h2 class="q-title">Чего не хватает<br>нашему <em>книжному клубу?</em></h2>
+        <p class="q-hint">Это самый важный вопрос — не стесняйся, говори честно. Мы хотим стать лучше</p>
+        <div class="opts two" id="g11" style="margin-bottom:16px">
+          <button class="opt check" onclick="multi(this,11,'g11')"><div class="opt-mark"></div><span class="opt-icon">📅</span><div class="opt-label">Более частые встречи<div class="opt-sub">Хочется видеться чаще</div></div></button>
+          <button class="opt check" onclick="multi(this,11,'g11')"><div class="opt-mark"></div><span class="opt-icon">🌍</span><div class="opt-label">Разнообразие жанров<div class="opt-sub">Читаем слишком похоже</div></div></button>
+          <button class="opt check" onclick="multi(this,11,'g11')"><div class="opt-mark"></div><span class="opt-icon">🎙️</span><div class="opt-label">Живые дискуссии<div class="opt-sub">Хочется глубже обсуждать</div></div></button>
+          <button class="opt check" onclick="multi(this,11,'g11')"><div class="opt-mark"></div><span class="opt-icon">✍️</span><div class="opt-label">Совместное письмо<div class="opt-sub">Писать вместе, делиться текстами</div></div></button>
+          <button class="opt check" onclick="multi(this,11,'g11')"><div class="opt-mark"></div><span class="opt-icon">🎭</span><div class="opt-label">Гости и авторы<div class="opt-sub">Приглашать писателей и критиков</div></div></button>
+          <button class="opt check" onclick="multi(this,11,'g11')"><div class="opt-mark"></div><span class="opt-icon">🌐</span><div class="opt-label">Онлайн-формат<div class="opt-sub">Встречи для тех, кто не рядом</div></div></button>
+          <button class="opt check" onclick="multi(this,11,'g11')"><div class="opt-mark"></div><span class="opt-icon">☕</span><div class="opt-label">Больше неформального<div class="opt-sub">Просто поговорить, без структуры</div></div></button>
+          <button class="opt check" onclick="multi(this,11,'g11')"><div class="opt-mark"></div><span class="opt-icon">📚</span><div class="opt-label">Клубная библиотека<div class="opt-sub">Обмениваться книгами между собой</div></div></button>
+        </div>
+        <p style="font-size:13px;color:var(--dust);margin-bottom:10px">Или напиши своими словами — любая идея важна</p>
+        <textarea class="s-textarea" id="a11b" placeholder="Твоя идея или пожелание..." oninput="save('11b',this.value)" style="min-height:90px"></textarea>
+        <div class="q-nav">
+          <button class="btn-back" onclick="go(11,10)">← Назад</button>
+          <button class="btn-next" onclick="go(11,12)">Дальше →</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="q-slide" data-qi="12">
+      <div class="q-inner">
+        <div class="q-tag">Последняя глава</div>
+        <h2 class="q-title">Как чтение изменило<br><em>тебя?</em></h2>
+        <p class="q-hint">Один вопрос напоследок — честный и личный</p>
+        <textarea class="s-textarea" id="a12" placeholder="Книга, которая перевернула что-то внутри. Мысль, которую ты впервые встретил на странице..." oninput="save(12,this.value)" style="min-height:150px"></textarea>
+        <div class="q-nav">
+          <button class="btn-back" onclick="go(12,11)">← Назад</button>
+          <button class="btn-next green" onclick="finishSurvey()">Сыграть в игру 🎲</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══ GAME ══ -->
+<div id="game-screen" class="screen">
+  <div class="game-particles" id="gparts"></div>
+  <div class="game-inner">
+
+    <div id="game-intro">
+      <div class="game-badge">✦ Мини-игра ✦</div>
+      <h2 class="game-title">Кто ты из<br><em>книжных героев?</em></h2>
+      <p class="game-sub">7 вопросов — и мы раскроем, какой великий литературный персонаж скрывается в тебе. Отвечай первым инстинктом!</p>
+      <button class="btn-game" onclick="startGame()">Начать →</button>
+    </div>
+
+    <div id="game-questions" style="display:none">
+      <div class="game-progress" id="gp-dots"></div>
+      <div id="gq-area"></div>
+      <button class="btn-game" id="gq-next" onclick="nextGameQ()" disabled>Следующий →</button>
+    </div>
+
+    <div class="game-result" id="game-result">
+      <span class="result-hero-icon" id="r-icon"></span>
+      <div class="result-hero-name" id="r-name"></div>
+      <div class="result-hero-sub" id="r-sub"></div>
+      <p class="result-hero-desc" id="r-desc"></p>
+      <div id="r-traits" style="margin-bottom:8px"></div>
+
+      <!-- SHARE CARD -->
+      <div class="share-section">
+        <div class="share-title">📸 Сохрани свою карточку!</div>
+        <div class="share-hint">
+          Скачай картинку и поделись ею в комментариях к посту — нам интересно, кто все эти книжные герои!
+          <strong>⬇ Нажми кнопку → сохрани картинку → пришли нам в комментарии к посту</strong>
+        </div>
+        <div class="share-preview">
+          <canvas id="card-canvas"></canvas>
+        </div>
+        <button class="btn-download" onclick="downloadCard()">
+          <span class="btn-download-icon">⬇</span>
+          Скачать карточку
+        </button>
+      </div>
+
+      <div class="game-result-btns">
+        <button class="btn-game" onclick="submitAll()">Отправить ответы ✓</button>
+        <button class="btn-game" style="background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.2)" onclick="startGame()">Сыграть ещё раз</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══ THANKS ══ -->
+<div id="thanks" class="screen">
+  <div class="thanks-inner">
+    <span class="thanks-icon">📚</span>
+    <p class="thanks-eyebrow">✦ Ответы сохранены ✦</p>
+    <h2 class="thanks-title">Спасибо,<br><em id="thanks-name">читатель!</em></h2>
+    <p class="thanks-sub">Твои ответы помогут нам сделать клуб ещё лучше. До встречи на следующей книжной вечере!</p>
+    <div class="thanks-btns">
+      <button class="btn-sec" onclick="showScreen('hero');resetSurvey()">Заполнить снова</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ RESULTS (password protected) ══ -->
+<div id="results" class="screen">
+  <div class="res-header">
+    <div class="res-logo">
+      Книжный клуб Екатерины Салуквадзе
+      <small>Результаты опроса — только для организатора</small>
+    </div>
+    <div class="res-actions">
+      <span class="res-count" id="r-count">0 ответов</span>
+      <div class="view-tabs">
+        <button class="vtab on" onclick="switchTab('charts',this)">Сводка</button>
+        <button class="vtab" onclick="switchTab('people',this)">Участники</button>
+      </div>
+      <button class="btn-ghost" onclick="clearAll()">Очистить</button>
+      <button class="btn-sec" style="padding:8px 16px;font-size:12px" onclick="showScreen('hero')">← На главную</button>
+    </div>
+  </div>
+  <div class="res-body" id="res-body"></div>
+</div>
+
+<script>
+/* ════════════════════════
+   CONFIG — СМЕНИ ПАРОЛЬ!
+════════════════════════ */
+const ADMIN_PASSWORD = 'екатерина2025'; // ← Измени на свой пароль
+
+const SK = 'bk_es_v4';
+const TOTAL = 13;
+let ans = {};
+let curQ = 0;
+let curTab = 'charts';
+let gameScores = {A:0,B:0,C:0,D:0};
+let gameQ = 0;
+let gameAnswered = false;
+let currentHero = null;
+
+/* ════════ SCREENS ════════ */
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+/* ════════ PASSWORD ════════ */
+function openResults(){
+  document.getElementById('pwd-overlay').classList.add('show');
+  setTimeout(()=>document.getElementById('pwd-input').focus(),100);
+}
+function closePwd(){
+  document.getElementById('pwd-overlay').classList.remove('show');
+  document.getElementById('pwd-input').value='';
+  document.getElementById('pwd-err').classList.remove('show');
+}
+function checkPwd(){
+  const val = document.getElementById('pwd-input').value.trim();
+  if(val === ADMIN_PASSWORD){
+    closePwd();
+    showResults();
+  } else {
+    document.getElementById('pwd-err').classList.add('show');
+    document.getElementById('pwd-input').value='';
+    document.getElementById('pwd-input').focus();
+    setTimeout(()=>document.getElementById('pwd-err').classList.remove('show'),2500);
+  }
+}
+
+/* ════════ SURVEY ════════ */
+function startSurvey(){
+  buildDots();showSlide(0);showScreen('survey');
+}
+function buildDots(){
+  const c=document.getElementById('prog-dots');c.innerHTML='';
+  for(let i=0;i<TOTAL;i++){const d=document.createElement('div');d.className='prog-dot'+(i===0?' active':'');c.appendChild(d);}
+}
+function showSlide(n){
+  document.querySelectorAll('.q-slide').forEach((s,i)=>{s.classList.remove('active','exit');if(i===n)s.classList.add('active');});
+  document.getElementById('prog-text').textContent=`${n+1} / ${TOTAL}`;
+  document.querySelectorAll('.prog-dot').forEach((d,i)=>{d.className='prog-dot'+(i<n?' done':(i===n?' active':''));});
+  curQ=n;
+}
+function go(from,to){
+  const slides=document.querySelectorAll('.q-slide');
+  slides[from].classList.add('exit');
+  setTimeout(()=>slides[from].classList.remove('active','exit'),350);
+  showSlide(to);slides[to].classList.add('active');
+  document.getElementById('slides').scrollTop=0;
+}
+function save(qi,val){ans[qi]=val;}
+function updateSlider(el,sid){
+  const v=parseInt(el.value);
+  document.getElementById(sid).textContent=v===10?'10+':v;
+  const pct=v/10*100;
+  el.style.background=`linear-gradient(to right,var(--amber) 0%,var(--amber) ${pct}%,var(--line) ${pct}%,var(--line) 100%)`;
+}
+function one(el,qi,gid){
+  document.querySelectorAll(`#${gid} .opt`).forEach(o=>o.classList.remove('selected'));
+  el.classList.add('selected');
+  save(qi,el.querySelector('.opt-label').firstChild.textContent.trim());
+}
+function multi(el,qi,gid){
+  el.classList.toggle('selected');
+  const sel=[...document.querySelectorAll(`#${gid} .opt.selected`)].map(o=>o.querySelector('.opt-label').firstChild.textContent.trim());
+  save(qi,sel);
+}
+let starRating={};
+function rateStar(idx,qi){
+  starRating[qi]=idx+1;
+  document.querySelectorAll(`#stars${qi} .star`).forEach((s,i)=>s.classList.toggle('lit',i<=idx));
+  save(qi,idx+1);
+}
+function finishSurvey(){
+  if(!ans[1])ans[1]=document.getElementById('a1').value;
+  if(!ans[0])ans[0]=document.getElementById('a0').value||'Участник';
+  const gp=document.getElementById('gparts');gp.innerHTML='';
+  ['📚','📖','✍️','🖊️','📝','🌙','⭐','🕯️','🗝️'].forEach((e,i)=>{
+    const s=document.createElement('span');s.className='game-particle';s.textContent=e;
+    s.style.left=(10+i*10)+'%';s.style.setProperty('--dur',(8+i*2)+'s');s.style.animationDelay=(-i*1.5)+'s';
+    gp.appendChild(s);
+  });
+  showScreen('game-screen');
+}
+
+/* ════════ GAME DATA ════════ */
+const GQS=[
+  {text:'Идёт дождь. Ты дома один. Первое желание — ?',opts:[{l:'А',t:'Открыть старый дневник и писать',s:'A'},{l:'Б',t:'Позвонить кому-нибудь и поговорить',s:'B'},{l:'В',t:'Читать у окна с чаем',s:'C'},{l:'Г',t:'Придумать план нового проекта',s:'D'}]},
+  {text:'Ты нашёл таинственный конверт без адреса. Твои действия?',opts:[{l:'А',t:'Осторожно открою — любопытство сильнее',s:'C'},{l:'Б',t:'Выясню, чей он, по косвенным уликам',s:'A'},{l:'В',t:'Сначала подумаю о последствиях',s:'D'},{l:'Г',t:'Передам кому надо — это чужое',s:'B'}]},
+  {text:'В твоей жизни появляется новый человек. Первое, что замечаешь — ?',opts:[{l:'А',t:'Что скрывает его взгляд',s:'A'},{l:'Б',t:'Как он держится среди других',s:'D'},{l:'В',t:'Тепло — или холод — от него',s:'B'},{l:'Г',t:'Детали: жест, слово, интонацию',s:'C'}]},
+  {text:'Главный твой страх — это?',opts:[{l:'А',t:'Потерять себя',s:'A'},{l:'Б',t:'Остаться непонятым',s:'B'},{l:'В',t:'Упустить важное решение',s:'D'},{l:'Г',t:'Пропустить что-то прекрасное',s:'C'}]},
+  {text:'Как ты принимаешь трудные решения?',opts:[{l:'А',t:'Долго думаю и взвешиваю всё',s:'D'},{l:'Б',t:'Прислушиваюсь к чувствам',s:'B'},{l:'В',t:'Ищу скрытую логику ситуации',s:'A'},{l:'Г',t:'Доверяю первому импульсу',s:'C'}]},
+  {text:'Твоя суперсила в компании людей — ?',opts:[{l:'А',t:'Замечаю то, что другие не видят',s:'A'},{l:'Б',t:'Умею слушать по-настоящему',s:'B'},{l:'В',t:'Создаю атмосферу и настроение',s:'C'},{l:'Г',t:'Веду за собой, когда нужно',s:'D'}]},
+  {text:'Книга закончилась. Ты закрываешь её и…',opts:[{l:'А',t:'Долго сижу в тишине — перевариваю',s:'A'},{l:'Б',t:'Хочу немедленно поговорить об этом',s:'B'},{l:'В',t:'Начинаю следующую почти сразу',s:'C'},{l:'Г',t:'Делаю заметки или пишу отзыв',s:'D'}]},
+];
+
+const HEROES={
+  A:{icon:'🕵️',name:'Шерлок Холмс',sub:'Аналитик и наблюдатель',desc:'Ты видишь мир иначе. За каждым фактом — скрытый смысл, за каждым человеком — история. Твой разум не знает покоя, а интуиция опережает логику.',traits:['Наблюдательность','Нестандартное мышление','Внутренний мир','Глубина'],colors:['#1a0f06','#2d1a08','#c9962f']},
+  B:{icon:'💛',name:'Татьяна Ларина',sub:'Душа и чувство',desc:'Ты создан(а) из искренности. Твои чувства настоящие, иногда неудобно настоящие. Ты любишь глубоко и думаешь о людях даже когда они этого не заслуживают.',traits:['Глубина чувств','Верность себе','Чуткость','Внутренняя честность'],colors:['#0f0a1a','#1a0f2d','#8b6baf']},
+  C:{icon:'🌺',name:'Дон Кихот',sub:'Мечтатель и романтик',desc:'Ты живёшь чуть правее обычного мира — там, где есть место подвигам и красоте. Тебя не останавливают правила. Ты видишь потенциал там, где другие видят ограничения.',traits:['Воображение','Смелость мечты','Непосредственность','Вера в лучшее'],colors:['#0a1a0f','#0f2d1a','#4a7a42']},
+  D:{icon:'👑',name:'Скарлетт О\'Хара',sub:'Воля и характер',desc:'Ты не сломаешься. Что бы ни случилось — встанешь и пойдёшь дальше. Ты умеешь принимать решения там, где другие замирают.',traits:['Сила воли','Стратегическое мышление','Лидерство','Стойкость'],colors:['#1a0a0a','#2d0f0f','#8a3318']},
+};
+
+/* ════════ GAME LOGIC ════════ */
+function startGame(){
+  gameScores={A:0,B:0,C:0,D:0};gameQ=0;
+  document.getElementById('game-intro').style.display='none';
+  document.getElementById('game-questions').style.display='block';
+  document.getElementById('game-result').style.display='none';
+  buildGameDots();showGameQ(0);
+}
+function buildGameDots(){
+  const c=document.getElementById('gp-dots');c.innerHTML='';
+  GQS.forEach((_,i)=>{const d=document.createElement('div');d.className='gp-dot'+(i===0?' cur':'');c.appendChild(d);});
+}
+function showGameQ(n){
+  const q=GQS[n];gameAnswered=false;
+  document.getElementById('gq-next').disabled=true;
+  document.querySelectorAll('.gp-dot').forEach((d,i)=>{d.className='gp-dot'+(i<n?' done':(i===n?' cur':''));});
+  document.getElementById('gq-area').innerHTML=`
+    <div class="gq-num">Вопрос ${n+1} из ${GQS.length}</div>
+    <div class="gq-text">${q.text}</div>
+    <div class="game-opts">
+      ${q.opts.map(o=>`<button class="game-opt" onclick="pickGameOpt(this,'${o.s}')"><div class="game-opt-letter">${o.l}</div><span>${o.t}</span></button>`).join('')}
+    </div>`;
+  document.getElementById('gq-next').textContent=n===GQS.length-1?'Узнать результат ✨':'Следующий →';
+}
+function pickGameOpt(el,score){
+  document.querySelectorAll('.game-opt').forEach(o=>o.classList.remove('sel'));
+  el.classList.add('sel');gameScores[score]++;gameAnswered=true;
+  document.getElementById('gq-next').disabled=false;
+}
+function nextGameQ(){
+  if(!gameAnswered)return;gameQ++;
+  if(gameQ>=GQS.length)showGameResult();
+  else{showGameQ(gameQ);gameAnswered=false;}
+}
+function showGameResult(){
+  document.getElementById('game-questions').style.display='none';
+  const winner=Object.entries(gameScores).sort((a,b)=>b[1]-a[1])[0][0];
+  currentHero=HEROES[winner];
+  ans['game_hero']=currentHero.name;
+  document.getElementById('r-icon').textContent=currentHero.icon;
+  document.getElementById('r-name').textContent=currentHero.name;
+  document.getElementById('r-sub').textContent=currentHero.sub;
+  document.getElementById('r-desc').textContent=currentHero.desc;
+  document.getElementById('r-traits').innerHTML=currentHero.traits.map(t=>`<span class="result-trait">${t}</span>`).join('');
+  const res=document.getElementById('game-result');
+  res.style.display='block';
+  drawHeroCard(currentHero, ans[0]||'Читатель');
+}
+
+/* ════════ CANVAS CARD ════════ */
+function drawHeroCard(hero, name){
+  const canvas=document.getElementById('card-canvas');
+  const W=800,H=440;
+  canvas.width=W;canvas.height=H;
+  canvas.style.display='block';
+  const ctx=canvas.getContext('2d');
+
+  // Background gradient
+  const bg=ctx.createLinearGradient(0,0,W,H);
+  bg.addColorStop(0,hero.colors[0]);
+  bg.addColorStop(.5,hero.colors[1]);
+  bg.addColorStop(1,hero.colors[0]);
+  ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+
+  // Subtle grid pattern
+  ctx.strokeStyle='rgba(255,255,255,0.03)';ctx.lineWidth=1;
+  for(let x=0;x<W;x+=40){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+  for(let y=0;y<H;y+=40){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+
+  // Glow circle
+  const glow=ctx.createRadialGradient(W*.35,H*.5,0,W*.35,H*.5,240);
+  glow.addColorStop(0,hero.colors[2]+'40');glow.addColorStop(1,'transparent');
+  ctx.fillStyle=glow;ctx.fillRect(0,0,W,H);
+
+  // Left border accent
+  const accent=ctx.createLinearGradient(0,0,0,H);
+  accent.addColorStop(0,'transparent');accent.addColorStop(.5,hero.colors[2]);accent.addColorStop(1,'transparent');
+  ctx.fillStyle=accent;ctx.fillRect(0,0,4,H);
+
+  // Top label
+  ctx.fillStyle='rgba(255,255,255,0.25)';
+  ctx.font='500 11px Inter, sans-serif';
+  ctx.letterSpacing='3px';
+  ctx.fillText('КНИЖНЫЙ КЛУБ ЕКАТЕРИНЫ САЛУКВАДЗЕ', 40, 44);
+
+  // Divider line
+  ctx.strokeStyle='rgba(255,255,255,0.1)';ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(40,56);ctx.lineTo(W-40,56);ctx.stroke();
+
+  // Big emoji icon
+  ctx.font='90px serif';
+  ctx.fillText(hero.icon, 44, 180);
+
+  // Hero name
+  ctx.fillStyle=hero.colors[2];
+  ctx.font='700 48px Georgia, serif';
+  ctx.letterSpacing='-1px';
+  ctx.fillText(hero.name, 44, 250);
+
+  // Sub label
+  ctx.fillStyle='rgba(255,255,255,0.4)';
+  ctx.font='400 14px Inter, sans-serif';
+  ctx.letterSpacing='2px';
+  ctx.fillText(hero.sub.toUpperCase(), 44, 278);
+
+  // Participant name
+  ctx.fillStyle='rgba(255,255,255,0.15)';
+  ctx.font='300 13px Inter, sans-serif';
+  ctx.letterSpacing='1px';
+  ctx.fillText('УЧАСТНИК', 44, 324);
+  ctx.fillStyle='rgba(255,255,255,0.85)';
+  ctx.font='400 22px Georgia, serif';
+  ctx.letterSpacing='0px';
+  ctx.fillText(name, 44, 352);
+
+  // Traits pills (text only)
+  let tx=44;
+  const pillY=390;
+  ctx.font='500 12px Inter, sans-serif';
+  ctx.letterSpacing='0.5px';
+  hero.traits.forEach(t=>{
+    const tw=ctx.measureText(t).width;
+    const pw=tw+24;
+    // pill bg
+    ctx.fillStyle='rgba(255,255,255,0.08)';
+    ctx.beginPath();
+    roundRect(ctx,tx,pillY-16,pw,26,6);
+    ctx.fill();
+    // pill border
+    ctx.strokeStyle='rgba(255,255,255,0.15)';ctx.lineWidth=1;
+    ctx.beginPath();roundRect(ctx,tx,pillY-16,pw,26,6);ctx.stroke();
+    // text
+    ctx.fillStyle='rgba(255,255,255,0.6)';
+    ctx.fillText(t,tx+12,pillY+1);
+    tx+=pw+8;
+  });
+
+  // Right side decoration — large faded letter
+  ctx.save();
+  ctx.globalAlpha=0.04;
+  ctx.fillStyle='#fff';
+  ctx.font='bold 320px Georgia, serif';
+  ctx.letterSpacing='-10px';
+  ctx.fillText(hero.name[0], W-220, H+60);
+  ctx.restore();
+
+  // Bottom right — small logo mark
+  ctx.fillStyle='rgba(255,255,255,0.15)';
+  ctx.font='italic 400 15px Georgia, serif';
+  ctx.letterSpacing='0';
+  ctx.textAlign='right';
+  ctx.fillText('📖 @книжный_клуб', W-40, H-20);
+  ctx.textAlign='left';
+}
+
+function roundRect(ctx,x,y,w,h,r){
+  ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.quadraticCurveTo(x+w,y,x+w,y+r);
+  ctx.lineTo(x+w,y+h-r);ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+  ctx.lineTo(x+r,y+h);ctx.quadraticCurveTo(x,y+h,x,y+h-r);
+  ctx.lineTo(x,y+r);ctx.quadraticCurveTo(x,y,x+r,y);ctx.closePath();
+}
+
+function downloadCard(){
+  const canvas=document.getElementById('card-canvas');
+  const name=(ans[0]||'reader').replace(/\s+/g,'_');
+  const heroName=(currentHero?.name||'hero').replace(/\s+/g,'_').replace(/'/g,'');
+  const link=document.createElement('a');
+  link.download=`книжный_клуб_${heroName}_${name}.png`;
+  link.href=canvas.toDataURL('image/png');
+  link.click();
+}
+
+/* ════════ SUBMIT ════════ */
+function submitAll(){
+  const entry={id:Date.now(),ts:new Date().toLocaleString('ru'),answers:{...ans}};
+  const stored=JSON.parse(localStorage.getItem(SK)||'[]');
+  stored.push(entry);
+  localStorage.setItem(SK,JSON.stringify(stored));
+  const name=ans[0]||'читатель';
+  document.getElementById('thanks-name').textContent=name+'!';
+  showScreen('thanks');
+}
+
+function resetSurvey(){
+  ans={};starRating={};gameScores={A:0,B:0,C:0,D:0};gameQ=0;currentHero=null;
+  document.querySelectorAll('.opt').forEach(o=>o.classList.remove('selected'));
+  document.querySelectorAll('.game-opt').forEach(o=>o.classList.remove('sel'));
+  document.querySelectorAll('.star').forEach(s=>s.classList.remove('lit'));
+  ['a0','a3','a3b','a4','a4b','a5','a5b','a9','a10b','a11b','a12'].forEach(id=>{
+    const el=document.getElementById(id);if(el)el.value='';
+  });
+  document.getElementById('a1').value=3;updateSlider(document.getElementById('a1'),'sv1');
+  document.getElementById('game-intro').style.display='block';
+  document.getElementById('game-questions').style.display='none';
+  document.getElementById('game-result').style.display='none';
+}
+
+/* ════════ RESULTS ════════ */
+function showResults(){
+  curTab='charts';
+  document.querySelectorAll('.vtab').forEach((b,i)=>b.classList.toggle('on',i===0));
+  renderResults();showScreen('results');
+}
+function switchTab(tab,btn){
+  curTab=tab;document.querySelectorAll('.vtab').forEach(b=>b.classList.remove('on'));btn.classList.add('on');renderResults();
+}
+function renderResults(){
+  const data=JSON.parse(localStorage.getItem(SK)||'[]');
+  const body=document.getElementById('res-body');
+  document.getElementById('r-count').textContent=plural(data.length,'ответ','ответа','ответов');
+  if(!data.length){body.innerHTML=`<div class="empty-state"><h3>Пока тихо</h3><p>Участники ещё не заполнили опрос.</p></div>`;return;}
+  if(curTab==='charts')renderCharts(data,body);else renderPeople(data,body);
+  setTimeout(()=>{
+    document.querySelectorAll('.rc,.person-card').forEach((c,i)=>setTimeout(()=>c.classList.add('vis'),i*70));
+    document.querySelectorAll('.bfill').forEach(b=>{b.style.width=b.dataset.w});
+  },60);
+}
+function renderCharts(data,body){
+  let h='';
+  const bv=data.map(d=>parseInt(d.answers[1])||0);
+  const avg=(bv.reduce((a,b)=>a+b,0)/bv.length).toFixed(1);
+  h+=`<div class="rc"><div class="rc-tag">Вопрос 02</div><div class="rc-title">Книг в месяц в среднем</div><div class="avg-box"><div class="avg-num">${avg}</div><div class="avg-meta"><div class="avg-desc">книги читает участник клуба в среднем за месяц</div><div class="avg-track"><div class="avg-fill" style="width:${Math.min(avg/10*100,100)}%"></div></div></div></div></div>`;
+  h+=barCard(data,2,'Вопрос 03','Любимые жанры',true,['','s','l','r','','s','','l']);
+  h+=barCard(data,6,'Вопрос 07','Формат чтения',false,['s','l','r','']);
+  h+=barCard(data,7,'Вопрос 08','Где читают участники',false);
+  h+=barCard(data,8,'Вопрос 09','Что важно в книге',false,['s','','l','r','']);
+  const books=data.map(d=>d.answers[3]).filter(Boolean);
+  if(books.length)h+=`<div class="rc"><div class="rc-tag">Вопрос 04</div><div class="rc-title">Любимые книги участников</div><div class="quotes">${books.map((b,i)=>`<div class="quote-item">${esc(b)}<div class="quote-author">— ${esc(data[i]?.answers[0]||'Участник')}</div></div>`).join('')}</div></div>`;
+  const mh=data.map(d=>d.answers[4]).filter(Boolean);
+  if(mh.length)h+=`<div class="rc"><div class="rc-tag">Вопрос 05</div><div class="rc-title">Любимые мужские персонажи</div><div class="hero-cloud">${countRender(mh)}</div></div>`;
+  const fh=data.map(d=>d.answers[5]).filter(Boolean);
+  if(fh.length)h+=`<div class="rc"><div class="rc-tag">Вопрос 06</div><div class="rc-title">Любимые женские персонажи</div><div class="hero-cloud">${countRender(fh,'l')}</div></div>`;
+  const wish=data.map(d=>d.answers[9]).filter(Boolean);
+  if(wish.length)h+=`<div class="rc"><div class="rc-tag">Вопрос 10</div><div class="rc-title">Хотят прочитать вместе</div><div class="quotes">${wish.map((w,i)=>`<div class="quote-item">${esc(w)}<div class="quote-author">— ${esc(data[i]?.answers[0]||'Участник')}</div></div>`).join('')}</div></div>`;
+  const stars=data.map(d=>parseInt(d.answers[10])||0).filter(s=>s>0);
+  if(stars.length){const avgS=(stars.reduce((a,b)=>a+b,0)/stars.length).toFixed(1);const ss='★'.repeat(Math.round(avgS))+'☆'.repeat(5-Math.round(avgS));h+=`<div class="rc"><div class="rc-tag">Вопрос 11</div><div class="rc-title">Оценка атмосферы встреч</div><div class="avg-box"><div class="avg-num" style="font-size:48px">${avgS}</div><div class="avg-meta"><div style="font-size:24px;color:var(--gold);letter-spacing:2px;margin-bottom:8px">${ss}</div><div class="avg-desc">средняя оценка</div></div></div></div>`;}
+  const fb=data.map(d=>d.answers['10b']).filter(Boolean);
+  if(fb.length)h+=`<div class="rc"><div class="rc-tag">Вопрос 11</div><div class="rc-title">Отзывы об атмосфере</div><div class="quotes">${fb.map(w=>`<div class="quote-item s-border">${esc(w)}</div>`).join('')}</div></div>`;
+  h+=barCard(data,11,'Вопрос 12','Чего не хватает клубу',true,['','s','l','r','','l','s','']);
+  const miss=data.map(d=>d.answers['11b']).filter(Boolean);
+  if(miss.length)h+=`<div class="rc"><div class="rc-tag">Вопрос 12</div><div class="rc-title">Идеи участников — своими словами</div><div class="quotes">${miss.map((w,i)=>`<div class="quote-item l-border">${esc(w)}<div class="quote-author">— ${esc(data[i]?.answers[0]||'Участник')}</div></div>`).join('')}</div></div>`;
+  const gh=data.map(d=>d.answers['game_hero']).filter(Boolean);
+  if(gh.length){const gc={};gh.forEach(h=>{gc[h]=(gc[h]||0)+1});h+=`<div class="rc"><div class="rc-tag">Игра</div><div class="rc-title">Литературные двойники участников</div><div class="char-result-cloud">${Object.entries(gc).sort((a,b)=>b[1]-a[1]).map(([n,c])=>`<div class="char-result-badge">${Object.values(HEROES).find(hh=>hh.name===n)?.icon||'📚'} <strong>${esc(n)}</strong> <span style="background:var(--amber);color:#fff;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600">${c}</span></div>`).join('')}</div></div>`;}
+  body.innerHTML=h;
+}
+function barCard(data,qi,tag,title,multi,colors=[]){
+  const counts={};
+  data.forEach(d=>{const a=d.answers[qi];if(!a)return;const vals=multi?(Array.isArray(a)?a:[a]):[a];vals.forEach(v=>{counts[v]=(counts[v]||0)+1});});
+  const entries=Object.entries(counts).sort((a,b)=>b[1]-a[1]);
+  const max=Math.max(...entries.map(e=>e[1]),1);
+  const bars=entries.map(([k,v],i)=>`<div class="brow"><div class="brow-label">${esc(k)}</div><div class="btrack"><div class="bfill ${colors[i]||''}" data-w="${Math.round(v/max*100)}%" style="width:0%"></div></div><div class="bcount">${v}</div></div>`).join('');
+  return `<div class="rc"><div class="rc-tag">${tag}</div><div class="rc-title">${title}</div><div class="bchart">${bars||'<p style="color:var(--dust);font-size:14px">Нет ответов</p>'}</div></div>`;
+}
+function countRender(arr,cl=''){
+  const map={};arr.forEach(v=>{const k=v.split(',')[0].split('(')[0].trim().substring(0,40);map[k]=(map[k]||0)+1});
+  return Object.entries(map).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<div class="hero-tag ${cl}">${esc(k)}${v>1?`<div class="hero-tag-count">${v}</div>`:''}</div>`).join('');
+}
+function renderPeople(data,body){
+  const cards=data.map((d,i)=>{
+    const name=d.answers[0]||`Участник ${i+1}`;
+    const init=name[0]?.toUpperCase()||'?';
+    const rows=[
+      {q:'Книг в месяц',a:d.answers[1]||'—'},
+      {q:'Жанры',a:Array.isArray(d.answers[2])?d.answers[2].join(', '):(d.answers[2]||'—')},
+      {q:'Любимая книга',a:d.answers[3]||'—'},
+      {q:'Мужской персонаж',a:d.answers[4]||'—'},
+      {q:'Женский персонаж',a:d.answers[5]||'—'},
+      {q:'Формат чтения',a:d.answers[6]||'—'},
+      {q:'Литературный двойник',a:d.answers['game_hero']||'—'},
+      {q:'Хочет прочитать',a:d.answers[9]||'—'},
+      {q:'Не хватает клубу',a:Array.isArray(d.answers[11])?d.answers[11].join(', '):(d.answers[11]||'—')},
+    ].map(r=>`<div class="pc-row"><strong>${r.q}</strong>${esc(String(r.a))}</div>`).join('');
+    return `<div class="person-card"><div class="pc-head"><div class="pc-avatar">${init}</div><div><div class="pc-name">${esc(name)}</div><div class="pc-time">${d.ts}</div></div></div><div class="pc-rows">${rows}</div></div>`;
+  }).join('');
+  body.innerHTML=`<div class="people-grid">${cards}</div>`;
+}
+function clearAll(){if(confirm('Удалить все ответы?')){localStorage.removeItem(SK);renderResults();}}
+
+/* ════════ UTILS ════════ */
+function plural(n,one,few,many){const m=n%10,m2=n%100;if(m===1&&m2!==11)return`${n} ${one}`;if([2,3,4].includes(m)&&![12,13,14].includes(m2))return`${n} ${few}`;return`${n} ${many}`;}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+/* ════════ SECRET ACCESS ════════ */
+let typed='';
+document.addEventListener('keydown',e=>{
+  typed+=e.key.toLowerCase();
+  if(typed.endsWith('admin')){openResults();typed='';}
+  if(typed.length>20)typed=typed.slice(-12);
+});
+
+// Mobile: tap the "Е" circle 5 times
+let tapCount=0, tapTimer=null;
+function handleSecretTap(){
+  tapCount++;
+  clearTimeout(tapTimer);
+  // show visual feedback
+  const btn=document.getElementById('secret-btn');
+  btn.style.borderColor='rgba(201,150,47,'+(0.2*tapCount+0.3)+')';
+  if(tapCount>=5){
+    tapCount=0;
+    btn.style.borderColor='';
+    openResults();
+  } else {
+    tapTimer=setTimeout(()=>{
+      tapCount=0;
+      btn.style.borderColor='rgba(201,150,47,0.5)';
+    },1500);
+  }
+}
+</script>
+</body>
+</html>
