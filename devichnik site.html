@@ -458,12 +458,12 @@
 <!-- HERO -->
 <div class="hero">
   <div class="hero-ornament">✦ · · · ✦ · · · ✦</div>
-  <div class="hero-eyebrow">Книжный клуб · Специальный вечер</div>
+  <div class="hero-eyebrow">Книжный клуб</div>
   <h1 class="hero-title">Девичник</h1>
   <div class="hero-subtitle">в Переделкине</div>
   <div class="hero-date">
     <div class="hero-date-line"></div>
-    <div class="hero-date-text">18 июля</div>
+    <div class="hero-date-text">18 июля · 11:00</div>
     <div class="hero-date-line"></div>
   </div>
   <div class="scroll-hint">↓ листать</div>
@@ -530,9 +530,22 @@
     <div class="payment-ornament">✦ · · · ✦ · · · ✦</div>
     <div class="payment-label">Стоимость участия</div>
     <div class="payment-title">5 900 ₽</div>
-    <div class="payment-note">Включает бранч с трубочками и чаем,<br>экскурсию с гидом и интерактив.</div>
-    <a href="https://www.tinkoff.ru/rm/r_cUHoGdHSth.XpqHqAVSkV/9X7RD32888" target="_blank" class="pay-btn">Оплатить участие</a>
-    <div class="pay-info">Перевод через Т-Банк · Карта любого банка</div>
+    <div style="width: 100%; max-width: 360px; margin: 0 auto 24px;">
+      <input id="user-name" type="text" placeholder="Ваше имя" style="
+        width: 100%;
+        padding: 14px 20px;
+        font-family: 'EB Garamond', serif;
+        font-size: 16px;
+        background: rgba(255,255,255,0.07);
+        border: 1px solid rgba(160,120,64,0.4);
+        color: #F5EFE4;
+        outline: none;
+        margin-bottom: 12px;
+        letter-spacing: 1px;
+      "/>
+      <a id="register-btn" href="#" onclick="sendToTelegram()" class="pay-btn" style="display:block; text-align:center;">Записаться</a>
+    </div>
+    <div class="pay-info" style="margin-bottom: 28px;">Пришлём вам реквизиты для оплаты</div>
   </div>
 </div>
 
