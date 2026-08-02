@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Гордость и предубеждение — викторина книжного клуба</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,500;1,700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --parchment:#f6efe0;
+  --parchment-deep:#efe5d1;
+  --card:#fbf6ea;
+  --wine:#6d1f2b;
+  --wine-deep:#54121c;
+  --gold:#b0894e;
+  --gold-soft:#caa96a;
+  --ink:#2a2119;
+  --ink-soft:#5b4f42;
+  --line:#d8c9a9;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:'EB Garamond',Georgia,serif;
+  color:var(--ink);
+  background:var(--parchment);
+  background-image:
+    radial-gradient(circle at 18% 12%, rgba(176,137,78,.10), transparent 42%),
+    radial-gradient(circle at 82% 88%, rgba(109,31,43,.08), transparent 46%);
+  min-height:100vh;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:640px;margin:0 auto;padding:28px 20px 64px;min-height:100vh;display:flex;flex-direction:column;justify-content:center}
+.screen{display:none;animation:rise .5s ease both}
+.screen.on{display:block}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+
+/* ---------- shared bits ---------- */
+.eyebrow{font-size:12.5px;letter-spacing:.34em;text-transform:uppercase;color:var(--gold);font-weight:600}
+.rule{height:1px;background:linear-gradient(90deg,transparent,var(--gold-soft),transparent);margin:22px auto;width:70%}
+.orn{color:var(--gold);text-align:center;font-size:20px;letter-spacing:.4em;margin:6px 0}
+.serif{font-family:'Playfair Display',Georgia,serif}
+
+/* ---------- start ---------- */
+.start-card{text-align:center;padding:6px}
+.start-card h1{font-family:'Playfair Display',serif;font-weight:900;font-size:clamp(34px,9vw,52px);line-height:1.02;color:var(--wine);margin:14px 0 6px;letter-spacing:.01em}
+.start-card .sub{font-family:'Playfair Display',serif;font-style:italic;font-size:clamp(18px,4.6vw,22px);color:var(--ink-soft)}
+.epigraph{font-style:italic;font-size:18px;color:var(--ink-soft);max-width:440px;margin:24px auto 6px;line-height:1.55}
+.epigraph cite{display:block;font-style:normal;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-top:12px}
+.meta{display:flex;gap:26px;justify-content:center;margin:26px 0 6px;flex-wrap:wrap}
+.meta div{text-align:center}
+.meta b{font-family:'Playfair Display',serif;font-size:26px;color:var(--wine);display:block;line-height:1}
+.meta span{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-soft)}
+
+/* ---------- buttons ---------- */
+.btn{
+  font-family:'EB Garamond',serif;cursor:pointer;border:none;
+  background:var(--wine);color:#fbf3e6;
+  padding:15px 34px;font-size:18px;letter-spacing:.06em;border-radius:2px;
+  box-shadow:0 6px 18px rgba(84,18,28,.28);transition:transform .15s,box-shadow .15s,background .2s;
+}
+.btn:hover{background:var(--wine-deep);transform:translateY(-2px);box-shadow:0 10px 24px rgba(84,18,28,.34)}
+.btn:active{transform:translateY(0)}
+.btn.ghost{background:transparent;color:var(--wine);box-shadow:none;border:1px solid var(--gold-soft)}
+.btn.ghost:hover{background:rgba(176,137,78,.1);color:var(--wine-deep)}
+.btn:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.btn-row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:24px}
+
+/* ---------- quiz ---------- */
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft)}
+.stars{color:var(--gold);letter-spacing:2px}
+.progress{height:3px;background:var(--line);border-radius:2px;overflow:hidden;margin-bottom:26px}
+.progress i{display:block;height:100%;background:linear-gradient(90deg,var(--gold),var(--wine));width:0;transition:width .45s ease}
+.part-tag{font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);text-align:center;margin-bottom:14px}
+.q{font-family:'Playfair Display',serif;font-size:clamp(21px,5.3vw,27px);line-height:1.28;color:var(--ink);margin-bottom:26px;font-weight:500}
+.opts{display:flex;flex-direction:column;gap:11px}
+.opt{
+  font-family:'EB Garamond',serif;text-align:left;cursor:pointer;
+  background:var(--card);border:1px solid var(--line);color:var(--ink);
+  padding:14px 18px;font-size:17.5px;border-radius:3px;line-height:1.35;
+  transition:border-color .18s,background .18s,transform .1s;display:flex;gap:12px;align-items:baseline;
+}
+.opt .lt{font-family:'Playfair Display',serif;color:var(--gold);font-weight:700;flex:none}
+.opt:hover{border-color:var(--gold);background:#fffaf0}
+.opt:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.opt:disabled{cursor:default}
+.opt.correct{border-color:#4f7a4d;background:#eef6ec}
+.opt.correct .lt{color:#4f7a4d}
+.opt.wrong{border-color:#a8434f;background:#f8eceb}
+.opt.wrong .lt{color:#a8434f}
+.opt.dim{opacity:.55}
+.feedback{margin-top:22px;animation:fade .3s ease both}
+.verdict{font-family:'Playfair Display',serif;font-style:italic;font-size:19px;margin-bottom:8px}
+.verdict.ok{color:#4f7a4d}
+.verdict.no{color:#a8434f}
+.fact{font-size:16.5px;color:var(--ink-soft);border-left:2px solid var(--gold-soft);padding-left:14px;line-height:1.5}
+.fact b{color:var(--wine);font-weight:600}
+.next-row{margin-top:22px;display:flex;justify-content:flex-end}
+
+/* ---------- interstitial ---------- */
+.inter{text-align:center;padding:10px}
+.inter h2{font-family:'Playfair Display',serif;font-size:clamp(26px,7vw,38px);color:var(--wine);margin:10px 0}
+.inter p{font-size:18px;color:var(--ink-soft);max-width:420px;margin:0 auto;font-style:italic}
+
+/* ---------- result ---------- */
+.res-head{text-align:center;margin-bottom:20px}
+.rank-badge{display:inline-block;font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);border:1px solid var(--gold-soft);border-radius:100px;padding:7px 18px;margin-bottom:6px}
+.res-score{font-family:'Playfair Display',serif;font-size:16px;color:var(--ink-soft);font-style:italic}
+
+.callingcard{
+  position:relative;background:var(--card);
+  border:1px solid var(--line);border-radius:4px;
+  padding:34px 26px 30px;text-align:center;
+  box-shadow:0 18px 44px rgba(60,30,20,.16);overflow:hidden;
+}
+.callingcard::before{content:"";position:absolute;inset:9px;border:1px solid var(--gold-soft);border-radius:2px;pointer-events:none;opacity:.7}
+.cc-emblem{width:118px;height:118px;margin:2px auto 14px;position:relative;display:flex;align-items:center;justify-content:center}
+.cc-emblem svg{position:absolute;inset:0;width:100%;height:100%}
+.cc-emblem .mono{font-family:'Playfair Display',serif;font-weight:900;font-size:52px;position:relative;line-height:1}
+.cc-you{font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold)}
+.cc-name{font-family:'Playfair Display',serif;font-weight:700;font-size:clamp(28px,7.5vw,40px);line-height:1.05;margin:6px 0 2px}
+.cc-tag{font-family:'Playfair Display',serif;font-style:italic;font-size:19px;color:var(--ink-soft);margin-bottom:16px}
+.cc-quote{font-style:italic;font-size:17.5px;line-height:1.5;color:var(--ink);max-width:430px;margin:0 auto}
+.cc-desc{font-size:16.5px;color:var(--ink-soft);line-height:1.55;max-width:440px;margin:16px auto 0;text-align:left}
+.cc-foot{margin-top:20px;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
+
+.res-actions{margin-top:22px}
+.hint{text-align:center;font-size:14px;color:var(--ink-soft);margin-top:14px;font-style:italic}
+.best{text-align:center;font-size:14px;color:var(--gold);letter-spacing:.05em;margin-top:8px}
+canvas#cardCanvas{display:none}
+footer{text-align:center;margin-top:34px;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft);opacity:.75}
+a.tglink{color:var(--wine);text-decoration:none;border-bottom:1px solid var(--gold-soft)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ===================== START ===================== -->
+  <section id="start" class="screen on">
+    <div class="start-card">
+      <div class="eyebrow">Книжный клуб · викторина</div>
+      <div class="orn">❦</div>
+      <h1>Гордость<br>и предубеждение</h1>
+      <div class="sub">Джейн Остин, 1813</div>
+      <p class="epigraph">«Все знают, что молодой человек, располагающий средствами, должен подыскивать себе жену».<cite>Первая строка романа</cite></p>
+      <div class="rule"></div>
+      <div class="meta">
+        <div><b>38</b><span>вопросов</span></div>
+        <div><b>2</b><span>части</span></div>
+        <div><b>10</b><span>героев</span></div>
+      </div>
+      <p style="max-width:440px;margin:18px auto 0;color:var(--ink-soft);font-size:17px">
+        Сначала — испытание на знание романа: вопросы становятся всё коварнее.
+        Потом Меритон решит, <em>кто вы</em> на самом деле — и пришлёт вашу визитную карточку,
+        которую можно сохранить и отправить в чат клуба.
+      </p>
+      <div class="btn-row"><button class="btn" onclick="start()">Войти в Незерфилд</button></div>
+    </div>
+  </section>
+
+  <!-- ===================== QUIZ ===================== -->
+  <section id="quiz" class="screen">
+    <div class="topbar">
+      <span id="counter">Вопрос 1 / 30</span>
+      <span class="stars" id="stars"></span>
+    </div>
+    <div class="progress"><i id="bar"></i></div>
+    <div class="part-tag" id="partTag"></div>
+    <div class="q" id="question"></div>
+    <div class="opts" id="opts"></div>
+    <div class="feedback" id="feedback" style="display:none"></div>
+    <div class="next-row" id="nextRow" style="display:none">
+      <button class="btn" id="nextBtn" onclick="next()">Далее →</button>
+    </div>
+  </section>
+
+  <!-- ===================== INTERSTITIAL ===================== -->
+  <section id="inter" class="screen">
+    <div class="inter">
+      <div class="orn">❦</div>
+      <div class="eyebrow">Часть вторая</div>
+      <h2>Кто вы в Меритоне?</h2>
+      <p>Знания позади. Теперь — восемь вопросов о вашем нраве. Здесь нет верных ответов, только вы.</p>
+      <div class="btn-row"><button class="btn" onclick="startPart2()">Продолжить</button></div>
+    </div>
+  </section>
+
+  <!-- ===================== RESULT ===================== -->
+  <section id="result" class="screen">
+    <div class="res-head">
+      <div class="rank-badge" id="rankBadge"></div>
+      <div class="res-score" id="scoreLine"></div>
+    </div>
+
+    <div class="callingcard" id="card">
+      <div class="cc-emblem" id="emblem">
+        <svg viewBox="0 0 120 120" id="emblemSvg"></svg>
+        <span class="mono" id="mono"></span>
+      </div>
+      <div class="cc-you">Ваш герой</div>
+      <div class="cc-name serif" id="charName"></div>
+      <div class="cc-tag" id="charTag"></div>
+      <div class="cc-quote" id="charQuote"></div>
+      <div class="cc-desc" id="charDesc"></div>
+      <div class="cc-foot">@salukvadzeee · #такаябылалюбовь</div>
+    </div>
+
+    <div class="res-actions">
+      <div class="btn-row">
+        <button class="btn" onclick="saveImage()">Сохранить картинку</button>
+        <button class="btn ghost" onclick="shareResult()">Поделиться</button>
+      </div>
+      <div class="btn-row">
+        <button class="btn ghost" onclick="location.reload()">Пройти заново</button>
+      </div>
+      <p class="best" id="bestLine"></p>
+      <p class="hint">Картинку можно приложить в чат клуба — или откройте «Поделиться», чтобы отправить сразу.</p>
+    </div>
+  </section>
+
+  <footer>Книжный клуб Екатерины Салуквадзе</footer>
+</div>
+
+<canvas id="cardCanvas" width="1080" height="1350"></canvas>
+
+<script>
+/* ============================================================
+   ДАННЫЕ
+   ============================================================ */
+
+// ---- Часть 1: викторина на знание (по нарастающей) ----
+// level: 1 лёгкий · 2 средний · 3 сложный
+const knowledge = [
+  {lvl:1, q:"Чем, по знаменитой первой строке романа, «должен подыскать себе» холостяк с состоянием?",
+   o:["Жену","Поместье","Место в парламенте","Хорошего управляющего"], a:0,
+   f:"Ирония задана с первой строки: «истина» на деле принадлежит не мужчинам, а матерям незамужних дочерей."},
+  {lvl:1, q:"Как называется родовое поместье семьи Беннет?",
+   o:["Лонгборн","Незерфилд","Меритон","Розингс"], a:0,
+   f:"Лонгборн — но по майорату он уйдёт не дочерям, а дальнему кузену."},
+  {lvl:2, q:"Кто первым делает Элизабет предложение руки и сердца?",
+   o:["Мистер Коллинз","Мистер Дарси","Мистер Уикхем","Мистер Бингли"], a:0,
+   f:"Напыщенное сватовство Коллинза и твёрдый отказ Элизабет приводят миссис Беннет в отчаяние."},
+  {lvl:2, q:"Кто, к изумлению Элизабет, принимает предложение мистера Коллинза?",
+   o:["Шарлотта Лукас","Мэри Беннет","Кэролайн Бингли","Китти Беннет"], a:0,
+   f:"Практичная Шарлотта выбирает надёжный дом, а не любовь, — и не считает это поражением."},
+  {lvl:2, q:"Кем приходится Дарси грозная леди Кэтрин де Бёр?",
+   o:["Тётей","Матерью","Сестрой","Крёстной"], a:0,
+   f:"Она же покровительница Коллинза; узнав о слухах про помолвку Дарси и Элизабет, она примчится улаживать дело лично."},
+  {lvl:2, q:"Как мистер Дарси отзывается об Элизабет на первом балу в Меритоне?",
+   o:["«Она как будто мила. И всё же не настолько хороша, чтобы нарушить мой душевный покой»","«Первая красавица зала»","«Лучшая партия в графстве»","«Слишком умна, чтобы с ней танцевать»"], a:0,
+   f:"Эти слова, брошенные вслух, Элизабет случайно слышит — и с них начинается её предубеждение против Дарси."},
+  {lvl:2, q:"Кто из сестёр Беннет сбегает с мистером Уикхемом?",
+   o:["Лидия","Китти","Мэри","Джейн"], a:0,
+   f:"Побег пятнадцатилетней Лидии грозит опозорить всю семью и погубить надежды старших сестёр."},
+  {lvl:2, q:"Какой уловкой миссис Беннет добивается, чтобы Джейн задержалась в Незерфилде?",
+   o:["Отправляет её верхом, надеясь на дождь","Задерживает её карету","Ссылается на её болезнь","Просит Бингли лично"], a:0,
+   f:"Джейн попадает под ливень, простужается и остаётся под кровом Бингли на несколько дней — именно этого мать и добивалась."},
+  {lvl:2, q:"Каково полное имя мистера Дарси?",
+   o:["Фицуильям Дарси","Чарльз Дарси","Джордж Дарси","Уильям Дарси"], a:0,
+   f:"Фицуильям — фамилия его знатной матери; её же носит и кузен, полковник Фицуильям."},
+  {lvl:2, q:"Как называется поместье леди Кэтрин де Бёр?",
+   o:["Розингс-парк","Пемберли","Незерфилд","Хансфорд"], a:0,
+   f:"В Розингсе всё призвано подавлять величием — включая саму хозяйку."},
+  {lvl:2, q:"Где живёт и служит мистер Коллинз?",
+   o:["В Хансфорде, в Кенте, при Розингсе","В Меритоне","В Незерфилде","В Лондоне"], a:0,
+   f:"Приход в Хансфорде ему пожаловала леди Кэтрин — о чьей «снисходительности» он готов говорить без умолку."},
+  {lvl:2, q:"Каким ремеслом занят мистер Гардинер, брат миссис Беннет?",
+   o:["Он купец","Он адвокат","Он офицер","Он священник"], a:0,
+   f:"Гардинер — торговец из Чипсайда; для сестёр Бингли это повод для снобизма, хотя манерами он превосходит их обеих."},
+  {lvl:2, q:"Каков годовой доход мистера Дарси, о котором тут же судачит весь бал?",
+   o:["10 000 фунтов","5 000 фунтов","2 000 фунтов","20 000 фунтов"], a:0,
+   f:"Десять тысяч в год делают его самым завидным женихом графства — репутация складывается ещё до первого его слова."},
+  {lvl:2, q:"Кому по майорату отойдёт Лонгборн после смерти мистера Беннета?",
+   o:["Мистеру Коллинзу","Мистеру Уикхему","Старшей дочери Джейн","Брату миссис Беннет"], a:0,
+   f:"Именно поэтому визит Коллинза так тревожит миссис Беннет — и поэтому дочерям так важно удачно выйти замуж."},
+  {lvl:2, q:"Кто тайно оплачивает долги Уикхема, чтобы устроить его брак с Лидией?",
+   o:["Мистер Дарси","Мистер Гардинер","Мистер Беннет","Мистер Бингли"], a:0,
+   f:"Дарси делает это молча, не желая огласки, — поступок, который окончательно меняет к нему Элизабет."},
+
+  {lvl:3, q:"Что Дарси объясняет Элизабет в письме, вручённом наутро после отвергнутого предложения?",
+   o:["Свою роль в разрыве Бингли и Джейн и правду об Уикхеме","Только правду об Уикхеме","Причину своей гордости","Тайну завещания старого Дарси"], a:0,
+   f:"Это письмо — перелом романа: с него у Элизабет начинают рушиться её «первые впечатления»."},
+  {lvl:3, q:"Где Дарси впервые — и на редкость неуклюже — делает Элизабет предложение?",
+   o:["В Хансфорде, где она гостит у Шарлотты","На балу в Незерфилде","В Пемберли","В Лонгборне"], a:0,
+   f:"Гордое признание в Кенте он завершает рассуждением о её низком происхождении — и получает решительный отказ."},
+  {lvl:3, q:"Кто невольно проговаривается Элизабет, что Дарси расстроил брак Бингли и Джейн?",
+   o:["Полковник Фицуильям","Кэролайн Бингли","Леди Кэтрин","Мистер Коллинз"], a:0,
+   f:"Кузен Дарси и не подозревает, что хвалит друга перед сестрой той самой девушки, которую тот разлучил с Бингли."},
+  {lvl:3, q:"Каким было первоначальное название романа?",
+   o:["«Первые впечатления»","«Разум и чувства»","«Меритонские хроники»","«Незерфилд-парк»"], a:0,
+   f:"«First Impressions» Остин набросала ещё в 1790-х; переработанный роман вышел лишь в 1813 году."},
+  {lvl:3, q:"На какой богатой наследнице Уикхем едва не женился в Меритоне — до истории с Лидией?",
+   o:["Мисс Мэри Кинг","Мисс Джорджиана Дарси","Мисс Энн де Бёр","Мисс Кэролайн Бингли"], a:0,
+   f:"Мисс Кинг внезапно получила 10 000 фунтов — и тут же стала Уикхему интересна; Элизабет замечает эту перемену с иронией."},
+  {lvl:3, q:"На какое приданое Джорджианы рассчитывал Уикхем, подговаривая её к побегу?",
+   o:["30 000 фунтов","10 000 фунтов","50 000 фунтов","5 000 фунтов"], a:0,
+   f:"Побег пятнадцатилетней Джорджианы удалось предотвратить в последний миг — Дарси не забудет этого Уикхему."},
+  {lvl:3, q:"Кем служил отец Уикхема при покойном старшем мистере Дарси?",
+   o:["Управляющим поместьем","Священником","Учителем","Врачом"], a:0,
+   f:"Оттого старый Дарси и опекал Уикхема — а тот отплатил семье чёрной неблагодарностью."},
+  {lvl:3, q:"Как зовут болезненную дочь леди Кэтрин, которую та прочит в жёны Дарси?",
+   o:["Энн де Бёр","Джорджиана","Мария Лукас","Кэролайн"], a:0,
+   f:"Молчаливую и хворую Энн леди Кэтрин с колыбели предназначила Дарси — план, о котором сам он и не думал."},
+  {lvl:3, q:"Кто приглашает Лидию погостить в Брайтоне — что и оборачивается побегом?",
+   o:["Миссис Форстер, жена полковника","Миссис Гардинер","Кэролайн Бингли","Шарлотта Коллинз"], a:0,
+   f:"Юная миссис Форстер зовёт подругу за полком в Брайтон; мистер Беннет легкомысленно отпускает Лидию — и напрасно."},
+  {lvl:3, q:"Куда отправляют Уикхема служить после его свадьбы с Лидией?",
+   o:["В Ньюкасл, на север","Обратно в Меритон","В Брайтон","В Лондон"], a:0,
+   f:"Молодожёнов спроваживают подальше — на север, в Ньюкасл; так семья избавляется от скандальной пары."},
+  {lvl:3, q:"Как зовут экономку Пемберли, чьи тёплые слова о хозяине заставляют Элизабет взглянуть на Дарси иначе?",
+   o:["Миссис Рейнольдс","Миссис Гардинер","Миссис Хилл","Миссис Форстер"], a:0,
+   f:"Миссис Рейнольдс, знавшая Дарси с детства, зовёт его добрейшим из хозяев — и это свидетельство дорогого стоит."},
+  {lvl:3, q:"Сколько лет Шарлотте Лукас — возраст, который и толкает её принять предложение Коллинза?",
+   o:["Двадцать семь","Двадцать","Тридцать пять","Двадцать три"], a:0,
+   f:"В двадцать семь, без состояния, Шарлотта считает брак с Коллинзом разумной защитой от участи старой девы."},
+  {lvl:3, q:"Кто из сестёр Беннет глубокомысленно рассуждает о разнице между гордостью и тщеславием?",
+   o:["Мэри","Лидия","Китти","Джейн"], a:0,
+   f:"«Гордость относится к нашему мнению о себе, тщеславие — к тому, что о нас подумают другие», — изрекает начитанная Мэри."},
+  {lvl:3, q:"В шутку Элизабет признаётся Джейн, что полюбила Дарси, впервые увидев…",
+   o:["его прекрасное поместье Пемберли","его в церкви","его письмо","его сестру Джорджиану"], a:0,
+   f:"«Пожалуй, с той минуты, как увидела его чудесные владения в Пемберли», — смеётся Элизабет, поддразнивая сестру."},
+  {lvl:3, q:"Чем Элизабет заканчивает свой отказ на первое предложение Дарси?",
+   o:["Называет его последним человеком на свете, за которого могла бы выйти замуж","Просит время на размышление","Советует ему посвататься к Джейн","Молча выходит из комнаты"], a:0,
+   f:"«Вы — последний человек на свете, за которого я согласилась бы выйти», — бросает она; эти слова Дарси припомнит ей, когда всё переменится."}
+];
+
+// ---- Часть 2: характер → герой ----
+const personality = [
+  {q:"На балу в Незерфилде вы, скорее всего…",
+   o:[
+     {t:"наблюдаете за гостями и подмечаете их слабости с тихой иронией",w:{eliza:2,bennet:1}},
+     {t:"танцуете без передышки и кокетничаете со всеми офицерами",w:{lydia:2,wickham:1}},
+     {t:"держитесь в стороне: всё это утомительно и не по вам",w:{darcy:2}},
+     {t:"находите кресло у стены и раскрываете книгу",w:{mary:2}},
+   ]},
+  {q:"Что для вас брак?",
+   o:[
+     {t:"союз равных — и только по любви",w:{eliza:2,jane:1}},
+     {t:"разумное устройство жизни, без иллюзий",w:{charlotte:2}},
+     {t:"вопрос положения, состояния и приличий",w:{catherine:2,collins:1}},
+     {t:"повод повеселиться и оказаться в центре внимания",w:{lydia:2}},
+   ]},
+  {q:"О вас чаще всего говорят, что вы…",
+   o:[
+     {t:"слишком прямолинейны и остры на язык",w:{eliza:2}},
+     {t:"слишком добры и во всех видите хорошее",w:{jane:2}},
+     {t:"слишком горды и держитесь особняком",w:{darcy:1,catherine:1}},
+     {t:"слишком обаятельны, чтобы вам можно было верить",w:{wickham:2}},
+   ]},
+  {q:"Ваш идеальный вечер — это…",
+   o:[
+     {t:"умный разговор с глазу на глаз",w:{darcy:1,eliza:1}},
+     {t:"большая шумная компания и танцы до утра",w:{lydia:2}},
+     {t:"тишина, книга и серьёзные размышления",w:{mary:2}},
+     {t:"визит к очень важным особам",w:{collins:2,catherine:1}},
+   ]},
+  {q:"Как вы относитесь к сплетням?",
+   o:[
+     {t:"обожаю собирать и пересказывать с удовольствием",w:{lydia:1,wickham:1}},
+     {t:"осуждаю вслух, но слушаю внимательно",w:{charlotte:2}},
+     {t:"считаю себя выше этого",w:{darcy:2}},
+     {t:"извлекаю из каждой мораль и назидание",w:{mary:2}},
+   ]},
+  {q:"Ваша главная слабость?",
+   o:[
+     {t:"поспешные суждения и упрямые предубеждения",w:{eliza:2}},
+     {t:"наивность — верю людям слишком легко",w:{jane:2}},
+     {t:"высокомерие к тем, кто ниже меня",w:{catherine:2,darcy:1}},
+     {t:"тщеславие и слабость к деньгам",w:{wickham:1,collins:1}},
+   ]},
+  {q:"Друг просит совета в сердечных делах. Вы…",
+   o:[
+     {t:"говорите правду, пусть и неприятную",w:{eliza:1,bennet:1}},
+     {t:"утешаете и мягко поддерживаете",w:{jane:2}},
+     {t:"советуете трезвый расчёт, а не чувства",w:{charlotte:2}},
+     {t:"переводите всё в шутку и удаляетесь в кабинет",w:{bennet:2}},
+   ]},
+  {q:"Когда вы влюблены, вы…",
+   o:[
+     {t:"отрицаете это до последнего",w:{eliza:1,darcy:1}},
+     {t:"признаётесь сразу и открыто",w:{jane:1,lydia:1}},
+     {t:"первым делом взвешиваете все выгоды",w:{charlotte:1,collins:1}},
+     {t:"очаровываете всех вокруг заодно",w:{wickham:2}},
+   ]},
+];
+
+// ---- Герои ----
+const chars = {
+  eliza:    {name:"Элизабет Беннет", mono:"E", color:"#6d1f2b",
+    tag:"Ум, живость и острый язык",
+    quote:"«Я готова простить ему гордость, если бы он не задел мою».",
+    desc:"Вы судите быстро и не боитесь ошибаться вслух. За иронией — тонкий ум и упрямая честность: вы скорее откажете двум женихам, чем предадите себя. Но и признать неправоту вы умеете — по-настоящему, а не для приличия."},
+  darcy:    {name:"Мистер Дарси", mono:"D", color:"#35485c",
+    tag:"Гордость, что скрывает верность",
+    quote:"«Мои добрые качества всегда под вашей защитой, и мне вменяется в вину худшее».",
+    desc:"Вас легко принять за холодного гордеца, и вы почти не пытаетесь разубедить. Но за сдержанностью — глубокая порядочность и способность к тихим, огромным поступкам, о которых вы никому не расскажете."},
+  jane:     {name:"Джейн Беннет", mono:"J", color:"#a56a74",
+    tag:"Кротость и вера в людей",
+    quote:"«Я не хочу торопиться обвинять кого бы то ни было».",
+    desc:"Вы ищете в каждом лучшее и страдаете молча, чтобы не тревожить других. Ваша доброта — не слабость, а редкая сила; мир держится на таких, как вы, хоть он и не всегда это ценит."},
+  bennet:   {name:"Мистер Беннет", mono:"B", color:"#7a6a3a",
+    tag:"Ирония и спасительная отстранённость",
+    quote:"«Ради чего мы живём, если не для того, чтобы забавлять соседей и смеяться над ними?»",
+    desc:"Вы наблюдаете за человеческой глупостью с бокалом иронии и предпочитаете кабинет любому балу. Мудры, остроумны — но иногда наблюдаете там, где стоило бы вмешаться."},
+  charlotte:{name:"Шарлотта Лукас", mono:"C", color:"#7d7a5e",
+    tag:"Трезвый ум без иллюзий",
+    quote:"«Я не романтична и никогда ею не была. Мне нужен лишь уютный дом».",
+    desc:"Вы видите жизнь такой, какая она есть, и устраиваете её с холодной сноровкой. Не мечтательница, но и не жертва: вы делаете разумный выбор — и извлекаете из него всё, что можно."},
+  lydia:    {name:"Лидия Беннет", mono:"L", color:"#c0533f",
+    tag:"Порыв, веселье и никакого страха",
+    quote:"«Ла! Как же весело! Кто бы мог подумать!»",
+    desc:"Вы живёте на полной скорости, смеётесь громче всех и не тратите время на последствия. Обаятельная, беспечная, неудержимая — с вами не соскучишься, но за вами лучше приглядывать."},
+  catherine:{name:"Леди Кэтрин де Бёр", mono:"K", color:"#5a3a5f",
+    tag:"Власть, гордыня и последнее слово",
+    quote:"«Упрямая, своевольная девчонка! Мне стыдно за вас».",
+    desc:"Вы привыкли, что с вами соглашаются, и раздаёте советы там, где их не просили. Величественны и бесцеремонны — но под этим властным нравом кроется искренняя вера, что вы лучше знаете, как всем следует жить."},
+  collins:  {name:"Мистер Коллинз", mono:"Co", color:"#9a7b3e",
+    tag:"Угодливость, возведённая в искусство",
+    quote:"«Смирение — одно из моих главных достоинств».",
+    desc:"Вы кланяетесь важным особам и произносите заготовленные комплименты с торжественной серьёзностью. Комичны и самодовольны, но по-своему упорны: своего вы, как правило, добиваетесь."},
+  mary:     {name:"Мэри Беннет", mono:"M", color:"#3f4a6b",
+    tag:"Книги, мораль и назидание",
+    quote:"«Тщеславие и гордость — вещи различные, хоть их и путают».",
+    desc:"Вы предпочитаете книгу балу и не упустите случая изречь что-нибудь поучительное. Серьёзны и начитанны; вам недостаёт лёгкости, но в мире, полном пустой болтовни, ваша тяга к смыслу дорогого стоит."},
+  wickham:  {name:"Мистер Уикхем", mono:"W", color:"#8a4a3a",
+    tag:"Обаяние без опоры",
+    quote:"«Приятная наружность и располагающие манеры — вот и всё, что при мне».",
+    desc:"Вы очаровываете с первой минуты: улыбка, история, нужный тон. Но за блеском — расчёт и ненадёжность. Опасный дар — нравиться всем; берегитесь, чтобы обаяние не заменило вам совесть."},
+};
+
+/* ============================================================
+   ЛОГИКА
+   ============================================================ */
+const TOTAL = knowledge.length + personality.length;
+let phase = 1, idx = 0, correct = 0, answered = false;
+const tally = {};
+Object.keys(chars).forEach(k=>tally[k]=0);
+
+const $ = id => document.getElementById(id);
+function show(scr){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));$(scr).classList.add('on');window.scrollTo({top:0,behavior:'smooth'});}
+function shuffle(arr){for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}return arr;}
+let curOptions=[], curCorrect=0;
+
+function start(){phase=1;idx=0;correct=0;show('quiz');renderKnowledge();}
+function startPart2(){phase=2;idx=0;show('quiz');renderPersonality();}
+
+function progress(done){
+  $('bar').style.width = (done/TOTAL*100)+'%';
+  $('counter').textContent = 'Вопрос '+done+' / '+TOTAL;
+}
+function starStr(l){return '★'.repeat(l)+'☆'.repeat(3-l);}
+
+function renderKnowledge(){
+  answered=false;
+  const item=knowledge[idx];
+  progress(idx+1);
+  $('partTag').textContent='Часть I · Испытание';
+  $('stars').textContent=starStr(item.lvl);
+  $('stars').style.display='';
+  $('question').textContent=item.q;
+  $('feedback').style.display='none';$('feedback').innerHTML='';
+  $('nextRow').style.display='none';
+  const box=$('opts');box.innerHTML='';
+  const letters=['A','B','C','D'];
+  curOptions=shuffle(item.o.map((txt,i)=>({txt,ok:i===item.a})));
+  curCorrect=curOptions.findIndex(o=>o.ok);
+  curOptions.forEach((o,i)=>{
+    const b=document.createElement('button');
+    b.className='opt';b.innerHTML='<span class="lt">'+letters[i]+'</span><span>'+o.txt+'</span>';
+    b.onclick=()=>answerKnowledge(i);
+    box.appendChild(b);
+  });
+}
+
+function answerKnowledge(i){
+  if(answered)return;answered=true;
+  const item=knowledge[idx];
+  const btns=$('opts').querySelectorAll('.opt');
+  btns.forEach((b,j)=>{
+    b.disabled=true;
+    if(j===curCorrect)b.classList.add('correct');
+    else if(j===i)b.classList.add('wrong');
+    else b.classList.add('dim');
+  });
+  const ok=(i===curCorrect);
+  if(ok)correct++;
+  const correctText=curOptions[curCorrect].txt;
+  const fb=$('feedback');
+  fb.innerHTML='<div class="verdict '+(ok?'ok':'no')+'">'+(ok?'Верно.':'Увы, мимо.')+'</div>'+
+               '<div class="fact"><b>'+(ok?'':'Правильный ответ — '+correctText+'. ')+'</b>'+item.f+'</div>';
+  fb.style.display='block';
+  $('nextBtn').textContent = (idx===knowledge.length-1)?'К части II →':'Далее →';
+  $('nextRow').style.display='flex';
+}
+
+function renderPersonality(){
+  const item=personality[idx];
+  progress(knowledge.length+idx+1);
+  $('partTag').textContent='Часть II · Ваш нрав';
+  $('stars').textContent='';$('stars').style.display='none';
+  $('question').textContent=item.q;
+  $('feedback').style.display='none';$('feedback').innerHTML='';
+  $('nextRow').style.display='none';
+  const box=$('opts');box.innerHTML='';
+  const letters=['A','B','C','D'];
+  shuffle(item.o.slice()).forEach((opt,i)=>{
+    const b=document.createElement('button');
+    b.className='opt';b.innerHTML='<span class="lt">'+letters[i]+'</span><span>'+opt.t+'</span>';
+    b.onclick=()=>answerPersonality(opt);
+    box.appendChild(b);
+  });
+}
+
+function answerPersonality(opt){
+  for(const k in opt.w)tally[k]+=opt.w[k];
+  idx++;
+  if(idx<personality.length)renderPersonality();
+  else finish();
+}
+
+function next(){
+  idx++;
+  if(idx<knowledge.length)renderKnowledge();
+  else show('inter');   // конец части I
+}
+
+/* ---------- РЕЗУЛЬТАТ ---------- */
+function rankFor(score){
+  const n=knowledge.length;const p=score/n;
+  if(p>=0.9)return "Сама Джейн Остин";
+  if(p>=0.72)return "Хозяйка Пемберли";
+  if(p>=0.5)return "Достойная партия";
+  if(p>=0.27)return "Гостья из Меритона";
+  return "Ещё только на первом балу";
+}
+function winner(){
+  let best=null,bv=-1;
+  // порядок задаёт приоритет при равенстве
+  const order=Object.keys(chars);
+  order.forEach(k=>{if(tally[k]>bv){bv=tally[k];best=k;}});
+  return best;
+}
+
+function finish(){
+  const score=correct, n=knowledge.length;
+  const key=winner(), c=chars[key];
+  $('rankBadge').textContent=rankFor(score);
+  $('scoreLine').textContent='Знание романа: '+score+' из '+n;
+  $('charName').textContent=c.name;
+  $('charTag').textContent=c.tag;
+  $('charQuote').textContent=c.quote;
+  $('charDesc').textContent=c.desc;
+  $('mono').textContent=c.mono;$('mono').style.color=c.color;
+  drawEmblemSvg(c.color);
+  $('card').style.setProperty('--accent',c.color);
+  // личный рекорд (работает на GitHub Pages; в предпросмотре просто не сохранится)
+  try{
+    const prev=parseInt(localStorage.getItem('pp_best')||'-1',10);
+    if(score>prev){localStorage.setItem('pp_best',score);$('bestLine').textContent='Новый личный рекорд!';}
+    else if(prev>=0){$('bestLine').textContent='Ваш лучший результат: '+prev+' из '+n;}
+  }catch(e){}
+  buildCanvas(key,score,n);
+  show('result');
+}
+
+function drawEmblemSvg(color){
+  const svg=$('emblemSvg');
+  svg.innerHTML=
+    '<circle cx="60" cy="60" r="56" fill="none" stroke="'+color+'" stroke-width="1.4" opacity="0.9"/>'+
+    '<circle cx="60" cy="60" r="49" fill="none" stroke="'+color+'" stroke-width="0.8" opacity="0.5"/>'+
+    laurel(30,color)+laurel(-30,color,true);
+}
+function laurel(rot,color,mirror){
+  let leaves='';
+  for(let i=0;i<5;i++){
+    const y=34+i*11;const s=1-i*0.06;
+    leaves+='<ellipse cx="'+(mirror?72:48)+'" cy="'+y+'" rx="'+(5*s)+'" ry="'+(9*s)+'" fill="'+color+'" opacity="0.55" transform="rotate('+(mirror?rot:-rot)+' '+(mirror?72:48)+' '+y+')"/>';
+  }
+  return leaves;
+}
+
+/* ---------- КАРТИНКА (canvas) ---------- */
+function buildCanvas(key,score,n){
+  const c=chars[key];
+  const cv=$('cardCanvas'),g=cv.getContext('2d');
+  const W=cv.width,H=cv.height;
+  const draw=()=>{
+    // фон-пергамент
+    g.fillStyle='#f6efe0';g.fillRect(0,0,W,H);
+    const grd=g.createRadialGradient(W*0.2,H*0.15,60,W*0.2,H*0.15,W);
+    grd.addColorStop(0,'rgba(176,137,78,0.14)');grd.addColorStop(1,'rgba(176,137,78,0)');
+    g.fillStyle=grd;g.fillRect(0,0,W,H);
+    // рамки
+    g.strokeStyle=c.color;g.lineWidth=3;g.globalAlpha=0.85;
+    g.strokeRect(46,46,W-92,H-92);
+    g.lineWidth=1.4;g.globalAlpha=0.55;g.strokeRect(64,64,W-128,H-128);
+    g.globalAlpha=1;
+    const cx=W/2;
+    // эмблема
+    g.strokeStyle=c.color;g.lineWidth=3;g.globalAlpha=0.9;
+    g.beginPath();g.arc(cx,250,84,0,Math.PI*2);g.stroke();
+    g.lineWidth=1.4;g.globalAlpha=0.5;g.beginPath();g.arc(cx,250,72,0,Math.PI*2);g.stroke();
+    g.globalAlpha=1;
+    g.fillStyle=c.color;g.textAlign='center';g.textBaseline='middle';
+    g.font='900 78px "Playfair Display", Georgia, serif';
+    g.fillText(c.mono,cx,258);
+    // подписи
+    g.fillStyle='#b0894e';g.font='600 26px "EB Garamond", serif';
+    g.fillText('ВАШ  ГЕРОЙ',cx,388);
+    // имя (перенос при необходимости)
+    g.fillStyle=c.color;g.font='700 66px "Playfair Display", serif';
+    wrap(g,c.name,cx,470,W-220,72);
+    // девиз
+    g.fillStyle='#5b4f42';g.font='italic 34px "Playfair Display", serif';
+    const nameLines=countLines(g,c.name,W-220);
+    let y=470+nameLines*72+8;
+    wrap(g,c.tag,cx,y,W-200,44,'italic 34px "Playfair Display", serif');
+    y+=54;
+    // разделитель
+    g.strokeStyle='#caa96a';g.lineWidth=1.2;
+    g.beginPath();g.moveTo(cx-90,y+18);g.lineTo(cx+90,y+18);g.stroke();
+    g.fillStyle='#b0894e';g.font='28px serif';g.fillText('❦',cx,y+18);
+    y+=64;
+    // цитата
+    g.fillStyle='#2a2119';g.font='italic 34px "EB Garamond", serif';
+    y=wrapReturn(g,c.quote,cx,y,W-260,46);
+    y+=40;
+    // ранг
+    g.fillStyle='#b0894e';g.font='600 27px "EB Garamond", serif';
+    g.fillText(rankFor(score).toUpperCase(),cx,y);
+    g.fillStyle='#5b4f42';g.font='italic 30px "Playfair Display", serif';
+    g.fillText('Знание романа — '+score+' из '+n,cx,y+42);
+    // подвал
+    g.fillStyle=c.color;g.font='600 26px "EB Garamond", serif';
+    g.fillText('ГОРДОСТЬ  И  ПРЕДУБЕЖДЕНИЕ',cx,H-150);
+    g.fillStyle='#b0894e';g.font='24px "EB Garamond", serif';
+    g.fillText('@salukvadzeee · #такаябылалюбовь',cx,H-110);
+    g.fillStyle='#5b4f42';g.font='22px "EB Garamond", serif';
+    g.fillText('Книжный клуб Екатерины Салуквадзе',cx,H-76);
+  };
+  if(document.fonts&&document.fonts.ready){document.fonts.ready.then(draw);setTimeout(draw,400);}else{draw();}
+}
+function countLines(g,text,maxW){
+  const words=text.split(' ');let line='',lines=1;
+  for(const w of words){if(g.measureText(line+w).width>maxW&&line){lines++;line=w+' ';}else line+=w+' ';}
+  return lines;
+}
+function wrap(g,text,cx,y,maxW,lh,font){
+  if(font)g.font=font;
+  const words=text.split(' ');let line='';let yy=y;
+  for(const w of words){
+    if(g.measureText(line+w).width>maxW&&line){g.fillText(line.trim(),cx,yy);line=w+' ';yy+=lh;}
+    else line+=w+' ';
+  }
+  g.fillText(line.trim(),cx,yy);
+}
+function wrapReturn(g,text,cx,y,maxW,lh){
+  const words=text.split(' ');let line='';let yy=y;
+  for(const w of words){
+    if(g.measureText(line+w).width>maxW&&line){g.fillText(line.trim(),cx,yy);line=w+' ';yy+=lh;}
+    else line+=w+' ';
+  }
+  g.fillText(line.trim(),cx,yy);return yy+lh;
+}
+
+function saveImage(){
+  const cv=$('cardCanvas');
+  const url=cv.toDataURL('image/png');
+  const a=document.createElement('a');
+  a.href=url;a.download='moy-geroy-gordost-i-predubezhdenie.png';
+  document.body.appendChild(a);a.click();a.remove();
+}
+async function shareResult(){
+  const cv=$('cardCanvas');
+  const name=$('charName').textContent;
+  const text='Моя визитная карточка из клуба: '+name+' — «Гордость и предубеждение». А кто вы?';
+  try{
+    const blob=await new Promise(r=>cv.toBlob(r,'image/png'));
+    const file=new File([blob],'geroy.png',{type:'image/png'});
+    if(navigator.canShare&&navigator.canShare({files:[file]})){
+      await navigator.share({files:[file],text});return;
+    }
+    if(navigator.share){await navigator.share({text});return;}
+  }catch(e){}
+  saveImage();
+  try{await navigator.clipboard.writeText(text);}catch(e){}
+  alert('Картинка сохранена. Приложите её в чат клуба ✦');
+}
+</script>
+</body>
+</html>
